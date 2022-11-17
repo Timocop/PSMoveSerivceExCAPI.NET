@@ -2,5 +2,7 @@
 Imports System.Runtime.InteropServices
 Imports PSMoveServiceExCAPI.PSMoveServiceExCAPI.Constants
 
-Public Class PSMoveServiceExCAPI
+Partial Public Class PSMoveServiceExCAPI
+    Class HeadMountDevices
+    End Class
 End Class

@@ -70,6 +70,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Constants.vb" />
+    <Compile Include="Classes\Controllers.vb" />
+    <Compile Include="Classes\HeadMountDevices.vb" />
+    <Compile Include="Classes\PInvoke.vb" />
+    <Compile Include="Classes\Service.vb" />
+    <Compile Include="Classes\Trackers.vb" />
     <Compile Include="PSMoveServiceExCAPI.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
