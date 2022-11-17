@@ -474,31 +474,31 @@ Partial Public Class PSMoveServiceExCAPI
         End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
-        Public Shared Function PSM_GetIsInitialized() As Boolean
+        Public Shared Function PSM_GetIsInitialized() As Byte
         End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
-        Public Shared Function PSM_GetIsConnected() As Boolean
+        Public Shared Function PSM_GetIsConnected() As Byte
         End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
-        Public Shared Function PSM_HasConnectionStatusChanged() As Boolean
+        Public Shared Function PSM_HasConnectionStatusChanged() As Byte
         End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
-        Public Shared Function PSM_HasControllerListChanged() As Boolean
+        Public Shared Function PSM_HasControllerListChanged() As Byte
         End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
-        Public Shared Function PSM_HasTrackerListChanged() As Boolean
+        Public Shared Function PSM_HasTrackerListChanged() As Byte
         End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
-        Public Shared Function PSM_HasHMDListChanged() As Boolean
+        Public Shared Function PSM_HasHMDListChanged() As Byte
         End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
-        Public Shared Function PSM_WasSystemButtonPressed() As Boolean
+        Public Shared Function PSM_WasSystemButtonPressed() As Byte
         End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>

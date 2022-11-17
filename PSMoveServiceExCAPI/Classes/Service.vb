@@ -10,8 +10,6 @@ Partial Public Class PSMoveServiceExCAPI
 
         Private g_sServerProtocolVersion As String = Nothing
 
-        Private g_bDidUpdate As Boolean = False
-
         Public Sub New()
             Me.New(PSMOVESERVICE_DEFAULT_ADDRESS, PSMOVESERVICE_DEFAULT_PORT)
         End Sub
@@ -38,6 +36,10 @@ Partial Public Class PSMoveServiceExCAPI
         End Property
 
         Public Sub Connect(Optional iTimeout As Integer = 5000)
+            If (IsInitialized()) Then
+                Throw New ArgumentException("Already initialized")
+            End If
+
             If (PInvoke.PSM_Initialize(g_sIP, g_sPort, iTimeout) <> PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_Initialize failed")
             End If
@@ -48,15 +50,11 @@ Partial Public Class PSMoveServiceExCAPI
         End Sub
 
         Public Function GetServerProtocolVersion() As String
-            If (Not IsInitialized()) Then
-                Throw New ArgumentException("Not initialized")
-            End If
-
             If (g_sServerProtocolVersion IsNot Nothing) Then
                 Return g_sServerProtocolVersion
             End If
 
-            Dim sServerVersion As New System.Text.StringBuilder(PSMOVESERVICE_MAX_VERSION_STRING_LEN)
+            Dim sServerVersion As New Text.StringBuilder(PSMOVESERVICE_MAX_VERSION_STRING_LEN)
             If (PInvoke.PSM_GetServiceVersionString(sServerVersion, sServerVersion.Capacity, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_GetServiceVersionString failed")
             End If
@@ -72,15 +70,11 @@ Partial Public Class PSMoveServiceExCAPI
         End Function
 
         Public Function IsInitialized() As Boolean
-            Return PInvoke.PSM_GetIsInitialized()
+            Return PInvoke.PSM_GetIsInitialized() > 0
         End Function
 
         Public Function IsConnected() As Boolean
-            If (Not g_bDidUpdate) Then
-                Update()
-            End If
-
-            Return PInvoke.PSM_GetIsConnected()
+            Return PInvoke.PSM_GetIsConnected() > 0
         End Function
 
         Public Sub Disconnect()
@@ -100,7 +94,9 @@ Partial Public Class PSMoveServiceExCAPI
                 Throw New ArgumentException("PSM_Update failed")
             End If
 
-            g_bDidUpdate = True
+            If (Not IsConnected()) Then
+                Throw New ArgumentException("Not connected")
+            End If
         End Sub
 
         Public Sub UpdateNoPollMessages()
@@ -111,46 +107,30 @@ Partial Public Class PSMoveServiceExCAPI
             If (PInvoke.PSM_UpdateNoPollMessages() <> PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_Update failed")
             End If
+
+            If (Not IsConnected()) Then
+                Throw New ArgumentException("Not connected")
+            End If
         End Sub
 
         Public Function HasConnectionStatusChanged() As Boolean
-            If (Not g_bDidUpdate) Then
-                Update()
-            End If
-
-            Return PInvoke.PSM_HasConnectionStatusChanged()
+            Return CBool(PInvoke.PSM_HasConnectionStatusChanged())
         End Function
 
         Public Function HasControllerListChanged() As Boolean
-            If (Not g_bDidUpdate) Then
-                Update()
-            End If
-
-            Return PInvoke.PSM_HasControllerListChanged()
+            Return CBool(PInvoke.PSM_HasControllerListChanged())
         End Function
 
         Public Function HasTrackerListChanged() As Boolean
-            If (Not g_bDidUpdate) Then
-                Update()
-            End If
-
-            Return PInvoke.PSM_HasTrackerListChanged()
+            Return CBool(PInvoke.PSM_HasTrackerListChanged())
         End Function
 
         Public Function HasHMDListChanged() As Boolean
-            If (Not g_bDidUpdate) Then
-                Update()
-            End If
-
-            Return PInvoke.PSM_HasHMDListChanged()
+            Return CBool(PInvoke.PSM_HasHMDListChanged())
         End Function
 
         Public Function WasSystemButtonPressed() As Boolean
-            If (Not g_bDidUpdate) Then
-                Update()
-            End If
-
-            Return PInvoke.PSM_WasSystemButtonPressed()
+            Return CBool(PInvoke.PSM_WasSystemButtonPressed())
         End Function
 
 #Region "IDisposable Support"
