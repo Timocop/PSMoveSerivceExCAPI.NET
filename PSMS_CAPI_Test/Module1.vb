@@ -42,15 +42,15 @@ Module Module1
             End If
 
             If (mController.m_Info.IsSensorValid) Then
-                Console.WriteLine("m_Gyroscope.x: " & mController.m_Info.m_PSMoveCalibratedSensor.m_Gyroscope.x)
-                Console.WriteLine("m_Gyroscope.y: " & mController.m_Info.m_PSMoveCalibratedSensor.m_Gyroscope.y)
-                Console.WriteLine("m_Gyroscope.z: " & mController.m_Info.m_PSMoveCalibratedSensor.m_Gyroscope.z)
+                Console.WriteLine("m_Gyroscope.x: " & mController.m_Info.m_PSCalibratedSensor.m_Gyroscope.x)
+                Console.WriteLine("m_Gyroscope.y: " & mController.m_Info.m_PSCalibratedSensor.m_Gyroscope.y)
+                Console.WriteLine("m_Gyroscope.z: " & mController.m_Info.m_PSCalibratedSensor.m_Gyroscope.z)
             End If
 
             If (mController.m_Info.IsSensorValid) Then
-                Console.WriteLine("m_Accelerometer.x: " & mController.m_Info.m_PSMoveCalibratedSensor.m_Accelerometer.x)
-                Console.WriteLine("m_Accelerometer.y: " & mController.m_Info.m_PSMoveCalibratedSensor.m_Accelerometer.y)
-                Console.WriteLine("m_Accelerometer.z: " & mController.m_Info.m_PSMoveCalibratedSensor.m_Accelerometer.z)
+                Console.WriteLine("m_Accelerometer.x: " & mController.m_Info.m_PSCalibratedSensor.m_Accelerometer.x)
+                Console.WriteLine("m_Accelerometer.y: " & mController.m_Info.m_PSCalibratedSensor.m_Accelerometer.y)
+                Console.WriteLine("m_Accelerometer.z: " & mController.m_Info.m_PSCalibratedSensor.m_Accelerometer.z)
             End If
 
             If (mController.m_Info.IsTrackingValid() AndAlso
@@ -59,7 +59,7 @@ Module Module1
                 Console.WriteLine("mCenter.y: " & mController.m_Info.m_PSTracking.GetTrackingProjection(Of PSMTrackingProjectionEllipse).mCenter.y)
             End If
 
-            Threading.Thread.Sleep(1)
+            Threading.Thread.Sleep(100)
 
             'GC.Collect()
             'GC.WaitForPendingFinalizers()

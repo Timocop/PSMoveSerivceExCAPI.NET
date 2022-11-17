@@ -44,9 +44,9 @@ Partial Public Class PSMoveServiceExCAPI
             Private g_PSState As IPSState = Nothing
             Private g_Physics As PSPhysics = Nothing
             Private g_Pose As PSPose = Nothing
-            Private g_PSMoveRawSensor As PSMoveRawSensor = Nothing
-            Private g_PSMoveCalibratedSensor As PSMoveCalibratedSensor = Nothing
-            Private g_PSTracking As PSTracking
+            Private g_PSRawSensor As PSRawSensor = Nothing
+            Private g_PSCalibratedSensor As PSCalibratedSensor = Nothing
+            Private g_PSTracking As PSTracking = Nothing
 
             Private g_iControllerId As Integer = -1
 
@@ -190,15 +190,15 @@ Partial Public Class PSMoveServiceExCAPI
                 End Get
             End Property
 
-            ReadOnly Property m_PSMoveRawSensor As PSMoveRawSensor
+            ReadOnly Property m_PSRawSensor As PSRawSensor
                 Get
-                    Return g_PSMoveRawSensor
+                    Return g_PSRawSensor
                 End Get
             End Property
 
-            ReadOnly Property m_PSMoveCalibratedSensor As PSMoveCalibratedSensor
+            ReadOnly Property m_PSCalibratedSensor As PSCalibratedSensor
                 Get
-                    Return g_PSMoveCalibratedSensor
+                    Return g_PSCalibratedSensor
                 End Get
             End Property
 
@@ -294,16 +294,208 @@ Partial Public Class PSMoveServiceExCAPI
             Class PSDualShock4State
                 Implements IPSState
 
+                Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMDualShock4)
+                    m_bHasValidHardwareCalibration = CBool(_FromPinvoke.bHasValidHardwareCalibration)
+                    m_bIsTrackingEnabled = CBool(_FromPinvoke.bIsTrackingEnabled)
+                    m_bIsCurrentlyTracking = CBool(_FromPinvoke.bIsCurrentlyTracking)
+                    m_bIsOrientationValid = CBool(_FromPinvoke.bIsOrientationValid)
+                    m_bIsPositionValid = CBool(_FromPinvoke.bIsPositionValid)
+                    m_bHasUnpublishedState = CBool(_FromPinvoke.bHasUnpublishedState)
+
+                    m_DevicePath = _FromPinvoke.DevicePath
+                    m_DeviceSerial = _FromPinvoke.DeviceSerial
+                    m_AssignedHostSerial = _FromPinvoke.AssignedHostSerial
+                    m_PairedToHost = CBool(_FromPinvoke.PairedToHost)
+                    m_ConnectionType = _FromPinvoke.ConnectionType
+                    m_TrackingColorType = _FromPinvoke.TrackingColorType
+
+
+                    m_DPadUpButton = _FromPinvoke.DPadUpButton
+                    m_DPadDownButton = _FromPinvoke.DPadDownButton
+                    m_DPadLeftButton = _FromPinvoke.DPadLeftButton
+                    m_DPadRightButton = _FromPinvoke.DPadRightButton
+
+                    m_SquareButton = _FromPinvoke.SquareButton
+                    m_CrossButton = _FromPinvoke.CrossButton
+                    m_CircleButton = _FromPinvoke.CircleButton
+                    m_TriangleButton = _FromPinvoke.TriangleButton
+
+                    m_L1Button = _FromPinvoke.L1Button
+                    m_R1Button = _FromPinvoke.R1Button
+                    m_L2Button = _FromPinvoke.L2Button
+                    m_R2Button = _FromPinvoke.R2Button
+                    m_L3Button = _FromPinvoke.L3Button
+                    m_R3Button = _FromPinvoke.R3Button
+
+                    m_ShareButton = _FromPinvoke.ShareButton
+                    m_OptionsButton = _FromPinvoke.OptionsButton
+
+                    m_PSButton = _FromPinvoke.PSButton
+                    m_TrackPadButton = _FromPinvoke.TrackPadButton
+
+
+                    m_LeftAnalogX = _FromPinvoke.LeftAnalogX
+                    m_LeftAnalogY = _FromPinvoke.LeftAnalogY
+                    m_RightAnalogX = _FromPinvoke.RightAnalogX
+                    m_RightAnalogY = _FromPinvoke.RightAnalogY
+                    m_LeftTriggerValue = _FromPinvoke.LeftTriggerValue
+                    m_RightTriggerValue = _FromPinvoke.RightTriggerValue
+
+                    m_BigRumble = CBool(_FromPinvoke.BigRumble)
+                    m_SmallRumble = CBool(_FromPinvoke.SmallRumble)
+                    m_LED_r = CBool(_FromPinvoke.LED_r)
+                    m_LED_g = CBool(_FromPinvoke.LED_g)
+                    m_LED_b = CBool(_FromPinvoke.LED_b)
+
+                    m_ResetPoseButtonPressTime = _FromPinvoke.ResetPoseButtonPressTime
+                    m_bResetPoseRequestSent = CBool(_FromPinvoke.bResetPoseRequestSent)
+                    m_bPoseResetButtonEnabled = CBool(_FromPinvoke.bPoseResetButtonEnabled)
+                End Sub
+
+                ReadOnly Property m_bHasValidHardwareCalibration As Boolean
+                ReadOnly Property m_bIsTrackingEnabled As Boolean
+                ReadOnly Property m_bIsCurrentlyTracking As Boolean
+                ReadOnly Property m_bIsOrientationValid As Boolean
+                ReadOnly Property m_bIsPositionValid As Boolean
+                ReadOnly Property m_bHasUnpublishedState As Boolean
+
+                ReadOnly Property m_DevicePath As String
+                ReadOnly Property m_DeviceSerial As String
+                ReadOnly Property m_AssignedHostSerial As String
+                ReadOnly Property m_PairedToHost As Boolean
+                ReadOnly Property m_ConnectionType As PSMConnectionType
+                ReadOnly Property m_TrackingColorType As PSMTrackingColorType
+
+
+                ReadOnly Property m_DPadUpButton As PSMButtonState
+                ReadOnly Property m_DPadDownButton As PSMButtonState
+                ReadOnly Property m_DPadLeftButton As PSMButtonState
+                ReadOnly Property m_DPadRightButton As PSMButtonState
+
+                ReadOnly Property m_SquareButton As PSMButtonState
+                ReadOnly Property m_CrossButton As PSMButtonState
+                ReadOnly Property m_CircleButton As PSMButtonState
+                ReadOnly Property m_TriangleButton As PSMButtonState
+
+                ReadOnly Property m_L1Button As PSMButtonState
+                ReadOnly Property m_R1Button As PSMButtonState
+                ReadOnly Property m_L2Button As PSMButtonState
+                ReadOnly Property m_R2Button As PSMButtonState
+                ReadOnly Property m_L3Button As PSMButtonState
+                ReadOnly Property m_R3Button As PSMButtonState
+
+                ReadOnly Property m_ShareButton As PSMButtonState
+                ReadOnly Property m_OptionsButton As PSMButtonState
+
+                ReadOnly Property m_PSButton As PSMButtonState
+                ReadOnly Property m_TrackPadButton As PSMButtonState
+
+
+                ReadOnly Property m_LeftAnalogX As Single
+                ReadOnly Property m_LeftAnalogY As Single
+                ReadOnly Property m_RightAnalogX As Single
+                ReadOnly Property m_RightAnalogY As Single
+                ReadOnly Property m_LeftTriggerValue As Single
+                ReadOnly Property m_RightTriggerValue As Single
+
+                ReadOnly Property m_BigRumble As Boolean
+                ReadOnly Property m_SmallRumble As Boolean
+                ReadOnly Property m_LED_r As Boolean
+                ReadOnly Property m_LED_g As Boolean
+                ReadOnly Property m_LED_b As Boolean
+
+                ReadOnly Property m_ResetPoseButtonPressTime As ULong
+                ReadOnly Property m_bResetPoseRequestSent As Boolean
+                ReadOnly Property m_bPoseResetButtonEnabled As Boolean
             End Class
 
             Class PSNaviState
                 Implements IPSState
 
+                Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMPSNavi)
+                    m_L1Button = _FromPinvoke.L1Button
+                    m_L2Button = _FromPinvoke.L2Button
+                    m_L3Button = _FromPinvoke.L3Button
+                    m_CircleButton = _FromPinvoke.CircleButton
+                    m_CrossButton = _FromPinvoke.CrossButton
+                    m_PSButton = _FromPinvoke.PSButton
+                    m_TriggerButton = _FromPinvoke.TriggerButton
+                    m_DPadUpButton = _FromPinvoke.DPadUpButton
+                    m_DPadRightButton = _FromPinvoke.DPadRightButton
+                    m_DPadDownButton = _FromPinvoke.DPadDownButton
+                    m_DPadLeftButton = _FromPinvoke.DPadLeftButton
+
+                    m_TriggerValue = CBool(_FromPinvoke.TriggerValue)
+                    m_StickXAxis = CBool(_FromPinvoke.StickXAxis)
+                    m_StickYAxis = CBool(_FromPinvoke.StickYAxis)
+                End Sub
+
+                ReadOnly Property m_L1Button As PSMButtonState
+                ReadOnly Property m_L2Button As PSMButtonState
+                ReadOnly Property m_L3Button As PSMButtonState
+                ReadOnly Property m_CircleButton As PSMButtonState
+                ReadOnly Property m_CrossButton As PSMButtonState
+                ReadOnly Property m_PSButton As PSMButtonState
+                ReadOnly Property m_TriggerButton As PSMButtonState
+                ReadOnly Property m_DPadUpButton As PSMButtonState
+                ReadOnly Property m_DPadRightButton As PSMButtonState
+                ReadOnly Property m_DPadDownButton As PSMButtonState
+                ReadOnly Property m_DPadLeftButton As PSMButtonState
+
+                ReadOnly Property m_TriggerValue As Boolean
+                ReadOnly Property m_StickXAxis As Boolean
+                ReadOnly Property m_StickYAxis As Boolean
             End Class
 
             Class PSVirtualState
                 Implements IPSState
 
+                Private g_bAxisStates(PSM_MAX_VIRTUAL_CONTROLLER_AXES) As Byte
+                Private g_iButtonStates(PSM_MAX_VIRTUAL_CONTROLLER_BUTTONS) As Integer
+
+                Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMVirtualController)
+                    m_bIsTrackingEnabled = CBool(_FromPinvoke.bIsTrackingEnabled)
+                    m_bIsCurrentlyTracking = CBool(_FromPinvoke.bIsCurrentlyTracking)
+                    m_bIsPositionValid = CBool(_FromPinvoke.bIsPositionValid)
+
+                    m_DevicePath = _FromPinvoke.DevicePath
+
+                    m_VendorID = _FromPinvoke.vendorID
+                    m_ProductID = _FromPinvoke.productID
+
+                    m_NumAxes = _FromPinvoke.numAxes
+                    m_NumButtons = _FromPinvoke.numButtons
+
+                    g_bAxisStates = _FromPinvoke.axisStates
+                    g_iButtonStates = _FromPinvoke.buttonStates
+
+                    m_TrackingColorType = _FromPinvoke.TrackingColorType
+                End Sub
+
+                ReadOnly Property m_bIsTrackingEnabled As Boolean
+                ReadOnly Property m_bIsCurrentlyTracking As Boolean
+                ReadOnly Property m_bIsPositionValid As Boolean
+
+                ReadOnly Property m_DevicePath As String
+
+                ReadOnly Property m_VendorID As Integer
+                ReadOnly Property m_ProductID As Integer
+
+                ReadOnly Property m_NumAxes As Integer
+                ReadOnly Property m_NumButtons As Integer
+
+                ReadOnly Property m_AxisStates(i As Integer) As Boolean
+                    Get
+                        Return CBool(g_bAxisStates(i))
+                    End Get
+                End Property
+                ReadOnly Property m_ButtonStates(i As Integer) As Integer
+                    Get
+                        Return g_iButtonStates(i)
+                    End Get
+                End Property
+
+                ReadOnly Property m_TrackingColorType As PSMTrackingColorType
             End Class
 
             Class PSPose
@@ -316,13 +508,29 @@ Partial Public Class PSMoveServiceExCAPI
                 ReadOnly Property m_Orientation As PSMQuatf
             End Class
 
-            Class PSMoveRawSensor
+            Class PSRawSensor
                 Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMPSMoveRawSensorData)
+                    m_Accelerometer = Nothing
+                    m_Gyroscope = Nothing
+
                     m_LinearVelocityCmPerSec = m_LinearVelocityCmPerSec.FromPinvoke(_FromPinvoke.LinearVelocityCmPerSec)
                     m_LinearAccelerationCmPerSecSqr = m_LinearAccelerationCmPerSecSqr.FromPinvoke(_FromPinvoke.LinearAccelerationCmPerSecSqr)
                     m_AngularVelocityRadPerSec = m_AngularVelocityRadPerSec.FromPinvoke(_FromPinvoke.AngularVelocityRadPerSec)
                     m_TimeInSeconds = _FromPinvoke.TimeInSeconds
                 End Sub
+
+                Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMDS4RawSensorData)
+                    m_Accelerometer = m_Accelerometer.FromPinvoke(_FromPinvoke.Accelerometer)
+                    m_Gyroscope = m_Gyroscope.FromPinvoke(_FromPinvoke.Gyroscope)
+
+                    m_LinearVelocityCmPerSec = Nothing
+                    m_LinearAccelerationCmPerSecSqr = Nothing
+                    m_AngularVelocityRadPerSec = Nothing
+                    m_TimeInSeconds = _FromPinvoke.TimeInSeconds
+                End Sub
+
+                ReadOnly Property m_Accelerometer As PSMVector3i
+                ReadOnly Property m_Gyroscope As PSMVector3i
 
                 ReadOnly Property m_LinearVelocityCmPerSec As PSMVector3i
                 ReadOnly Property m_LinearAccelerationCmPerSecSqr As PSMVector3i
@@ -330,9 +538,16 @@ Partial Public Class PSMoveServiceExCAPI
                 ReadOnly Property m_TimeInSeconds As Double
             End Class
 
-            Class PSMoveCalibratedSensor
+            Class PSCalibratedSensor
                 Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMPSMoveCalibratedSensorData)
                     m_Magnetometer = m_Magnetometer.FromPinvoke(_FromPinvoke.Magnetometer)
+                    m_Accelerometer = m_Accelerometer.FromPinvoke(_FromPinvoke.Accelerometer)
+                    m_Gyroscope = m_Gyroscope.FromPinvoke(_FromPinvoke.Gyroscope)
+                    m_TimeInSeconds = _FromPinvoke.TimeInSeconds
+                End Sub
+
+                Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMDS4CalibratedSensorData)
+                    m_Magnetometer = Nothing
                     m_Accelerometer = m_Accelerometer.FromPinvoke(_FromPinvoke.Accelerometer)
                     m_Gyroscope = m_Gyroscope.FromPinvoke(_FromPinvoke.Gyroscope)
                     m_TimeInSeconds = _FromPinvoke.TimeInSeconds
@@ -500,18 +715,7 @@ Partial Public Class PSMoveServiceExCAPI
             End Function
 
             Public Function IsSensorValid() As Boolean
-                Select Case (m_ControllerType)
-                    Case PSMControllerType.PSMController_Move
-                        Return (g_PSMoveRawSensor IsNot Nothing AndAlso g_PSMoveCalibratedSensor IsNot Nothing)
-                    Case PSMControllerType.PSMController_DualShock4
-                        ' ###TODO
-                    Case PSMControllerType.PSMController_Navi
-                        ' ###TODO
-                    Case PSMControllerType.PSMController_Virtual
-                        ' ###TODO
-                End Select
-
-                Return False
+                Return (g_PSRawSensor IsNot Nothing AndAlso g_PSCalibratedSensor IsNot Nothing)
             End Function
 
             Public Function IsStateValid() As Boolean
@@ -565,27 +769,54 @@ Partial Public Class PSMoveServiceExCAPI
                 End If
 
                 If ((iRefreshType And RefreshFlags.RefreshType_State) > 0) Then
-                    Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMove)))
-                    Try
-                        Select Case (g_iControllerType)
-                            Case PSMControllerType.PSMController_Move
+                    Select Case (g_iControllerType)
+                        Case PSMControllerType.PSMController_Move
+                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMove)))
+                            Try
                                 If (PInvoke.PSM_GetControllerPSMoveStateEx(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
                                     Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSMove)(hPtr)
 
                                     g_PSState = New PSMoveState(mData)
                                 End If
+                            Finally
+                                Marshal.FreeHGlobal(hPtr)
+                            End Try
 
-                            Case PSMControllerType.PSMController_DualShock4
-                                ' ###TODO
-                            Case PSMControllerType.PSMController_Navi
-                                ' ###TODO
-                            Case PSMControllerType.PSMController_Virtual
-                                ' ###TODO
+                        Case PSMControllerType.PSMController_DualShock4
+                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMDualShock4)))
+                            Try
+                                If (PInvoke.PSM_GetControllerDualShock4StateEx(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMDualShock4)(hPtr)
 
-                        End Select
-                    Finally
-                        Marshal.FreeHGlobal(hPtr)
-                    End Try
+                                    g_PSState = New PSDualShock4State(mData)
+                                End If
+                            Finally
+                                Marshal.FreeHGlobal(hPtr)
+                            End Try
+                        Case PSMControllerType.PSMController_Navi
+                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSNavi)))
+                            Try
+                                If (PInvoke.PSM_GetControllerPSNaviState(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSNavi)(hPtr)
+
+                                    g_PSState = New PSNaviState(mData)
+                                End If
+                            Finally
+                                Marshal.FreeHGlobal(hPtr)
+                            End Try
+                        Case PSMControllerType.PSMController_Virtual
+                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMVirtualController)))
+                            Try
+                                If (PInvoke.PSM_GetControllerVirtualControllerStateEx(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMVirtualController)(hPtr)
+
+                                    g_PSState = New PSVirtualState(mData)
+                                End If
+                            Finally
+                                Marshal.FreeHGlobal(hPtr)
+                            End Try
+
+                    End Select
                 End If
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Pose) > 0) Then
@@ -616,29 +847,57 @@ Partial Public Class PSMoveServiceExCAPI
                 End If
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Sensor) > 0) Then
-                    Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMoveRawSensorData)))
-                    Try
-                        If (PInvoke.PSM_GetControllerPSMoveRawSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                            Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSMoveRawSensorData)(hPtr)
+                    Select Case (g_iControllerType)
+                        Case PSMControllerType.PSMController_Move
+                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMoveRawSensorData)))
+                            Try
+                                If (PInvoke.PSM_GetControllerPSMoveRawSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSMoveRawSensorData)(hPtr)
 
-                            g_PSMoveRawSensor = New PSMoveRawSensor(mData)
-                        End If
-                    Finally
-                        Marshal.FreeHGlobal(hPtr)
-                    End Try
+                                    g_PSRawSensor = New PSRawSensor(mData)
+                                End If
+                            Finally
+                                Marshal.FreeHGlobal(hPtr)
+                            End Try
+                        Case PSMControllerType.PSMController_DualShock4
+                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMDS4RawSensorData)))
+                            Try
+                                If (PInvoke.PSM_GetControllerPSMoveRawSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMDS4RawSensorData)(hPtr)
+
+                                    g_PSRawSensor = New PSRawSensor(mData)
+                                End If
+                            Finally
+                                Marshal.FreeHGlobal(hPtr)
+                            End Try
+                    End Select
                 End If
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Sensor) > 0) Then
-                    Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMoveCalibratedSensorData)))
-                    Try
-                        If (PInvoke.PSM_GetControllerPSMoveSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                            Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSMoveCalibratedSensorData)(hPtr)
+                    Select Case (g_iControllerType)
+                        Case PSMControllerType.PSMController_Move
+                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMoveCalibratedSensorData)))
+                            Try
+                                If (PInvoke.PSM_GetControllerPSMoveSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSMoveCalibratedSensorData)(hPtr)
 
-                            g_PSMoveCalibratedSensor = New PSMoveCalibratedSensor(mData)
-                        End If
-                    Finally
-                        Marshal.FreeHGlobal(hPtr)
-                    End Try
+                                    g_PSCalibratedSensor = New PSCalibratedSensor(mData)
+                                End If
+                            Finally
+                                Marshal.FreeHGlobal(hPtr)
+                            End Try
+                        Case PSMControllerType.PSMController_DualShock4
+                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMDS4CalibratedSensorData)))
+                            Try
+                                If (PInvoke.PSM_GetControllerPSMoveSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMDS4CalibratedSensorData)(hPtr)
+
+                                    g_PSCalibratedSensor = New PSCalibratedSensor(mData)
+                                End If
+                            Finally
+                                Marshal.FreeHGlobal(hPtr)
+                            End Try
+                    End Select
                 End If
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Tracker) > 0) Then
@@ -683,13 +942,9 @@ Partial Public Class PSMoveServiceExCAPI
                                 Finally
                                     Marshal.FreeHGlobal(hPtr)
                                 End Try
-
                         End Select
-
                     End If
-
                 End If
-
             End Sub
         End Class
 

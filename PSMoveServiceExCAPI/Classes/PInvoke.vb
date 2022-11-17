@@ -525,11 +525,20 @@ Partial Public Class PSMoveServiceExCAPI
         Public Shared Function PSM_GetControllerPSMoveStateEx(controller_id As Integer, controller_out As IntPtr) As Integer
         End Function
 
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerPSNaviState(PSMControllerID controller_id, PSMPSNavi *controller_out);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerDualShock4State(PSMControllerID controller_id, PSMDualShock4 *controller_out);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerDualShock4StateEx(PSMControllerID controller_id, PSMDualShock4Ex *controller_out);
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerPSNaviState(controller_id As Integer, controller_out As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerDualShock4StateEx(controller_id As Integer, controller_out As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerVirtualControllerStateEx(controller_id As Integer, controller_out As IntPtr) As Integer
+        End Function
+
+        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerDualShock4State(PSMControllerID controller_id, PSMDualShock4 *controller_out); 
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerVirtualControllerState(PSMControllerID controller_id, PSMVirtualController *controller_out);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerVirtualControllerStateEx(PSMControllerID controller_id, PSMVirtualControllerEx *controller_out);
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_AllocateControllerListener(controller_id As Integer) As Integer
@@ -587,7 +596,9 @@ Partial Public Class PSMoveServiceExCAPI
         Public Shared Function PSM_GetControllerPSMoveRawSensorData(controller_id As Integer, out_data As IntPtr) As Integer
         End Function
 
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerDualShock4RawSensorData(PSMControllerID controller_id, PSMDS4RawSensorData *out_data);
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerDualShock4RawSensorData(controller_id As Integer, out_data As IntPtr) As Integer
+        End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_GetControllerPSMoveSensorData(controller_id As Integer, out_data As IntPtr) As Integer
