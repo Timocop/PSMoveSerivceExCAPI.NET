@@ -98,11 +98,11 @@ Partial Public Class PSMoveServiceExCAPI
                         Return
                     End If
 
-                    If (PInvoke.PSM_SetControllerHand(m_ControllerId, value, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
+                    g_iControllerHand = value
+
+                    If (PInvoke.PSM_SetControllerHand(m_ControllerId, g_iControllerHand, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
                         Throw New ArgumentException("PSM_SetControllerHand failed")
                     End If
-
-                    g_iControllerHand = value
                 End Set
             End Property
 
@@ -577,7 +577,7 @@ Partial Public Class PSMoveServiceExCAPI
 
             Class PSTracking
                 Private g_mTrackingProjection As Object
-                Private g_iShape As Constants.PSMShape = PSMShape.PSMShape_INVALID_PROJECTION
+                Private g_iShape As PSMShape = PSMShape.PSMShape_INVALID_PROJECTION
 
                 Sub New(_FromPinvoke As Object)
                     Select Case (True)
