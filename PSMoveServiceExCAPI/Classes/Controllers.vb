@@ -341,11 +341,11 @@ Partial Public Class PSMoveServiceExCAPI
                     m_LeftTriggerValue = _FromPinvoke.LeftTriggerValue
                     m_RightTriggerValue = _FromPinvoke.RightTriggerValue
 
-                    m_BigRumble = CBool(_FromPinvoke.BigRumble)
-                    m_SmallRumble = CBool(_FromPinvoke.SmallRumble)
-                    m_LED_r = CBool(_FromPinvoke.LED_r)
-                    m_LED_g = CBool(_FromPinvoke.LED_g)
-                    m_LED_b = CBool(_FromPinvoke.LED_b)
+                    m_BigRumble = _FromPinvoke.BigRumble
+                    m_SmallRumble = _FromPinvoke.SmallRumble
+                    m_LED_r = _FromPinvoke.LED_r
+                    m_LED_g = _FromPinvoke.LED_g
+                    m_LED_b = _FromPinvoke.LED_b
 
                     m_ResetPoseButtonPressTime = _FromPinvoke.ResetPoseButtonPressTime
                     m_bResetPoseRequestSent = CBool(_FromPinvoke.bResetPoseRequestSent)
@@ -398,11 +398,11 @@ Partial Public Class PSMoveServiceExCAPI
                 ReadOnly Property m_LeftTriggerValue As Single
                 ReadOnly Property m_RightTriggerValue As Single
 
-                ReadOnly Property m_BigRumble As Boolean
-                ReadOnly Property m_SmallRumble As Boolean
-                ReadOnly Property m_LED_r As Boolean
-                ReadOnly Property m_LED_g As Boolean
-                ReadOnly Property m_LED_b As Boolean
+                ReadOnly Property m_BigRumble As Byte
+                ReadOnly Property m_SmallRumble As Byte
+                ReadOnly Property m_LED_r As Byte
+                ReadOnly Property m_LED_g As Byte
+                ReadOnly Property m_LED_b As Byte
 
                 ReadOnly Property m_ResetPoseButtonPressTime As ULong
                 ReadOnly Property m_bResetPoseRequestSent As Boolean
