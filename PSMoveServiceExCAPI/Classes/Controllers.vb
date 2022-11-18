@@ -1179,9 +1179,18 @@ Partial Public Class PSMoveServiceExCAPI
         End Function
 
         Public Sub Disconnect()
-            m_DataStreamEnabled = False
-            m_Listening = False
-            m_DataStreamFlags = PSMStreamFlags.PSMStreamFlags_defaultStreamOptions
+            Try
+                m_Listening = False
+            Catch ex As Exception
+                ' Connection probably already dropped.
+            End Try
+
+            Try
+                m_DataStreamEnabled = False
+                m_DataStreamFlags = PSMStreamFlags.PSMStreamFlags_defaultStreamOptions
+            Catch ex As Exception
+                ' Connection probably already dropped.
+            End Try
         End Sub
 
 #Region "IDisposable Support"
