@@ -24,10 +24,16 @@
     <OptionStrict>On</OptionStrict>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="lib\PSMoveClient_CAPI.dll" Pack="true" PackagePath="contentFiles\any\any">
+    <Content Include="lib\PSMoveClient_CAPI.dll" Pack="true">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackagePath>contentFiles\any\any</PackagePath>
     </Content>
+    <ContentWithTargetPath Include="lib\PSMoveClient_CAPI.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <TargetPath>PSMoveClient_CAPI.dll</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />

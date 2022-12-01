@@ -27,11 +27,13 @@
     <OptionStrict>On</OptionStrict>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="PSMoveServiceEx.API" Version="0.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PSMoveServiceExCAPI\PSMoveServiceExCAPI.vbproj" />
   </ItemGroup>
   <PropertyGroup>
     <MyType>Empty</MyType>
