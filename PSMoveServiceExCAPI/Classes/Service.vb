@@ -1,21 +1,21 @@
 ﻿Imports System.Runtime.InteropServices
-Imports PSMoveServiceExCAPI.PSMoveServiceExCAPI.Constants
+Imports System.Text
 
 Partial Public Class PSMoveServiceExCAPI
     Class Service
         Implements IDisposable
 
-        Private g_sIP As String = ""
-        Private g_sPort As String = ""
+        Private ReadOnly g_sIP As String = ""
+        Private ReadOnly g_sPort As String = ""
 
         Private g_sServerProtocolVersion As String = Nothing
 
         Public Sub New()
-            Me.New(PSMOVESERVICE_DEFAULT_ADDRESS, PSMOVESERVICE_DEFAULT_PORT)
+            Me.New(Constants.PSMOVESERVICE_DEFAULT_ADDRESS, Constants.PSMOVESERVICE_DEFAULT_PORT)
         End Sub
 
         Public Sub New(_IP As String)
-            Me.New(_IP, PSMOVESERVICE_DEFAULT_PORT)
+            Me.New(_IP, Constants.PSMOVESERVICE_DEFAULT_PORT)
         End Sub
 
         Public Sub New(_IP As String, _Port As String)
@@ -40,7 +40,7 @@ Partial Public Class PSMoveServiceExCAPI
                 Throw New ArgumentException("Already initialized")
             End If
 
-            If (PInvoke.PSM_Initialize(g_sIP, g_sPort, iTimeout) <> PSMResult.PSMResult_Success) Then
+            If (PInvoke.PSM_Initialize(g_sIP, g_sPort, iTimeout) <> Constants.PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_Initialize failed")
             End If
 
@@ -54,8 +54,11 @@ Partial Public Class PSMoveServiceExCAPI
                 Return g_sServerProtocolVersion
             End If
 
-            Dim sServerVersion As New Text.StringBuilder(PSMOVESERVICE_MAX_VERSION_STRING_LEN)
-            If (PInvoke.PSM_GetServiceVersionString(sServerVersion, sServerVersion.Capacity, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
+            Dim sServerVersion As New StringBuilder(Constants.PSMOVESERVICE_MAX_VERSION_STRING_LEN)
+            If _
+                (PInvoke.PSM_GetServiceVersionString(sServerVersion, sServerVersion.Capacity,
+                                                     Constants.PSM_DEFAULT_TIMEOUT) <>
+                 Constants.PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_GetServiceVersionString failed")
             End If
 
@@ -90,7 +93,7 @@ Partial Public Class PSMoveServiceExCAPI
                 Throw New ArgumentException("Not initialized")
             End If
 
-            If (PInvoke.PSM_Update() <> PSMResult.PSMResult_Success) Then
+            If (PInvoke.PSM_Update() <> Constants.PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_Update failed")
             End If
 
@@ -104,7 +107,7 @@ Partial Public Class PSMoveServiceExCAPI
                 Throw New ArgumentException("Not initialized")
             End If
 
-            If (PInvoke.PSM_UpdateNoPollMessages() <> PSMResult.PSMResult_Success) Then
+            If (PInvoke.PSM_UpdateNoPollMessages() <> Constants.PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_Update failed")
             End If
 
@@ -134,6 +137,7 @@ Partial Public Class PSMoveServiceExCAPI
         End Function
 
 #Region "IDisposable Support"
+
         Private disposedValue As Boolean ' To detect redundant calls
 
         ' IDisposable
@@ -149,7 +153,7 @@ Partial Public Class PSMoveServiceExCAPI
         Public Sub Dispose() Implements IDisposable.Dispose
             Dispose(True)
         End Sub
-#End Region
 
+#End Region
     End Class
 End Class
