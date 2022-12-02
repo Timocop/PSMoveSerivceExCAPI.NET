@@ -1,22 +1,24 @@
 ﻿Imports System.Drawing
 Imports System.Runtime.InteropServices
-Imports PSMoveServiceExCAPI.PSMoveServiceExCAPI.Constants
 
 Partial Public Class PSMoveServiceExCAPI
     Class Controllers
         Implements IDisposable
 
-        Private g_mInfo As Info
+        Private ReadOnly g_mInfo As Info
         Private g_bListening As Boolean = False
         Private g_bDataStream As Boolean = False
-        Private g_iDataStreamFlags As PSMStreamFlags = PSMStreamFlags.PSMStreamFlags_defaultStreamOptions
+
+        Private _
+            g_iDataStreamFlags As Constants.PSMStreamFlags =
+                Constants.PSMStreamFlags.PSMStreamFlags_defaultStreamOptions
 
         Public Sub New(_ControllerId As Integer)
             Me.New(_ControllerId, False)
         End Sub
 
         Public Sub New(_ControllerId As Integer, _StartDataStream As Boolean)
-            If (_ControllerId < 0 OrElse _ControllerId > PSMOVESERVICE_MAX_CONTROLLER_COUNT - 1) Then
+            If (_ControllerId < 0 OrElse _ControllerId > Constants.PSMOVESERVICE_MAX_CONTROLLER_COUNT - 1) Then
                 Throw New ArgumentOutOfRangeException()
             End If
 
@@ -48,10 +50,10 @@ Partial Public Class PSMoveServiceExCAPI
             Private g_PSCalibratedSensor As PSCalibratedSensor = Nothing
             Private g_PSTracking As PSTracking = Nothing
 
-            Private g_iControllerId As Integer = -1
+            Private ReadOnly g_iControllerId As Integer = - 1
 
-            Private g_iControllerType As PSMControllerType = PSMControllerType.PSMController_None
-            Private g_iControllerHand As PSMControllerHand = PSMControllerHand.PSMControllerHand_Any
+            Private g_iControllerType As Constants.PSMControllerType = Constants.PSMControllerType.PSMController_None
+            Private g_iControllerHand As Constants.PSMControllerHand = Constants.PSMControllerHand.PSMControllerHand_Any
             Private g_sControllerSerial As String = ""
             Private g_sParentControllerSerial As String = ""
             Private g_iOutputSequenceNum As Integer
@@ -69,7 +71,9 @@ Partial Public Class PSMoveServiceExCAPI
                 RefreshType_Physics = (1 << 4)
                 RefreshType_Sensor = (1 << 5)
                 RefreshType_Tracker = (1 << 6)
-                RefreshType_All = (RefreshType_Basic Or RefreshType_State Or RefreshType_Pose Or RefreshType_Physics Or RefreshType_Sensor Or RefreshType_Tracker)
+                RefreshType_All =
+                    (RefreshType_Basic Or RefreshType_State Or RefreshType_Pose Or RefreshType_Physics Or
+                     RefreshType_Sensor Or RefreshType_Tracker)
             End Enum
 
             Public Sub New(_Parent As Controllers, _ControllerID As Integer)
@@ -83,24 +87,26 @@ Partial Public Class PSMoveServiceExCAPI
                 End Get
             End Property
 
-            ReadOnly Property m_ControllerType As PSMControllerType
+            ReadOnly Property m_ControllerType As Constants.PSMControllerType
                 Get
                     Return g_iControllerType
                 End Get
             End Property
 
-            Property m_ControllerHand As PSMControllerHand
+            Property m_ControllerHand As Constants.PSMControllerHand
                 Get
                     Return g_iControllerHand
                 End Get
-                Set(value As PSMControllerHand)
+                Set
                     If (g_iControllerHand = value) Then
                         Return
                     End If
 
                     g_iControllerHand = value
 
-                    If (PInvoke.PSM_SetControllerHand(m_ControllerId, g_iControllerHand, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
+                    If _
+                        (PInvoke.PSM_SetControllerHand(m_ControllerId, g_iControllerHand, Constants.PSM_DEFAULT_TIMEOUT) <>
+                         Constants.PSMResult.PSMResult_Success) Then
                         Throw New ArgumentException("PSM_SetControllerHand failed")
                     End If
                 End Set
@@ -229,16 +235,16 @@ Partial Public Class PSMoveServiceExCAPI
                     m_ConnectionType = _FromPinvoke.ConnectionType
                     m_TrackingColorType = _FromPinvoke.TrackingColorType
 
-                    m_TriangleButton = CType(_FromPinvoke.TriangleButton, PSMButtonState)
-                    m_CircleButton = CType(_FromPinvoke.CircleButton, PSMButtonState)
-                    m_CrossButton = CType(_FromPinvoke.CrossButton, PSMButtonState)
-                    m_SquareButton = CType(_FromPinvoke.SquareButton, PSMButtonState)
-                    m_SelectButton = CType(_FromPinvoke.SelectButton, PSMButtonState)
-                    m_StartButton = CType(_FromPinvoke.StartButton, PSMButtonState)
-                    m_PSButton = CType(_FromPinvoke.PSButton, PSMButtonState)
-                    m_MoveButton = CType(_FromPinvoke.MoveButton, PSMButtonState)
-                    m_TriggerButton = CType(_FromPinvoke.TriggerButton, PSMButtonState)
-                    m_BatteryValue = CType(_FromPinvoke.BatteryValue, PSMBatteryState)
+                    m_TriangleButton = CType(_FromPinvoke.TriangleButton, Constants.PSMButtonState)
+                    m_CircleButton = CType(_FromPinvoke.CircleButton, Constants.PSMButtonState)
+                    m_CrossButton = CType(_FromPinvoke.CrossButton, Constants.PSMButtonState)
+                    m_SquareButton = CType(_FromPinvoke.SquareButton, Constants.PSMButtonState)
+                    m_SelectButton = CType(_FromPinvoke.SelectButton, Constants.PSMButtonState)
+                    m_StartButton = CType(_FromPinvoke.StartButton, Constants.PSMButtonState)
+                    m_PSButton = CType(_FromPinvoke.PSButton, Constants.PSMButtonState)
+                    m_MoveButton = CType(_FromPinvoke.MoveButton, Constants.PSMButtonState)
+                    m_TriggerButton = CType(_FromPinvoke.TriggerButton, Constants.PSMButtonState)
+                    m_BatteryValue = CType(_FromPinvoke.BatteryValue, Constants.PSMBatteryState)
                     m_TriggerValue = _FromPinvoke.TriggerValue
                     m_Rumble = _FromPinvoke.Rumble
                     m_LED_r = _FromPinvoke.LED_r
@@ -261,19 +267,19 @@ Partial Public Class PSMoveServiceExCAPI
                 ReadOnly Property m_AssignedHostSerial As String
 
                 ReadOnly Property m_PairedToHost As Boolean
-                ReadOnly Property m_ConnectionType As PSMConnectionType
-                ReadOnly Property m_TrackingColorType As PSMTrackingColorType
+                ReadOnly Property m_ConnectionType As Constants.PSMConnectionType
+                ReadOnly Property m_TrackingColorType As Constants.PSMTrackingColorType
 
-                ReadOnly Property m_TriangleButton As PSMButtonState
-                ReadOnly Property m_CircleButton As PSMButtonState
-                ReadOnly Property m_CrossButton As PSMButtonState
-                ReadOnly Property m_SquareButton As PSMButtonState
-                ReadOnly Property m_SelectButton As PSMButtonState
-                ReadOnly Property m_StartButton As PSMButtonState
-                ReadOnly Property m_PSButton As PSMButtonState
-                ReadOnly Property m_MoveButton As PSMButtonState
-                ReadOnly Property m_TriggerButton As PSMButtonState
-                ReadOnly Property m_BatteryValue As PSMBatteryState
+                ReadOnly Property m_TriangleButton As Constants.PSMButtonState
+                ReadOnly Property m_CircleButton As Constants.PSMButtonState
+                ReadOnly Property m_CrossButton As Constants.PSMButtonState
+                ReadOnly Property m_SquareButton As Constants.PSMButtonState
+                ReadOnly Property m_SelectButton As Constants.PSMButtonState
+                ReadOnly Property m_StartButton As Constants.PSMButtonState
+                ReadOnly Property m_PSButton As Constants.PSMButtonState
+                ReadOnly Property m_MoveButton As Constants.PSMButtonState
+                ReadOnly Property m_TriggerButton As Constants.PSMButtonState
+                ReadOnly Property m_BatteryValue As Constants.PSMBatteryState
                 ReadOnly Property m_TriggerValue As Byte
                 ReadOnly Property m_Rumble As Byte
                 ReadOnly Property m_LED_r As Byte
@@ -363,32 +369,32 @@ Partial Public Class PSMoveServiceExCAPI
                 ReadOnly Property m_DeviceSerial As String
                 ReadOnly Property m_AssignedHostSerial As String
                 ReadOnly Property m_PairedToHost As Boolean
-                ReadOnly Property m_ConnectionType As PSMConnectionType
-                ReadOnly Property m_TrackingColorType As PSMTrackingColorType
+                ReadOnly Property m_ConnectionType As Constants.PSMConnectionType
+                ReadOnly Property m_TrackingColorType As Constants.PSMTrackingColorType
 
 
-                ReadOnly Property m_DPadUpButton As PSMButtonState
-                ReadOnly Property m_DPadDownButton As PSMButtonState
-                ReadOnly Property m_DPadLeftButton As PSMButtonState
-                ReadOnly Property m_DPadRightButton As PSMButtonState
+                ReadOnly Property m_DPadUpButton As Constants.PSMButtonState
+                ReadOnly Property m_DPadDownButton As Constants.PSMButtonState
+                ReadOnly Property m_DPadLeftButton As Constants.PSMButtonState
+                ReadOnly Property m_DPadRightButton As Constants.PSMButtonState
 
-                ReadOnly Property m_SquareButton As PSMButtonState
-                ReadOnly Property m_CrossButton As PSMButtonState
-                ReadOnly Property m_CircleButton As PSMButtonState
-                ReadOnly Property m_TriangleButton As PSMButtonState
+                ReadOnly Property m_SquareButton As Constants.PSMButtonState
+                ReadOnly Property m_CrossButton As Constants.PSMButtonState
+                ReadOnly Property m_CircleButton As Constants.PSMButtonState
+                ReadOnly Property m_TriangleButton As Constants.PSMButtonState
 
-                ReadOnly Property m_L1Button As PSMButtonState
-                ReadOnly Property m_R1Button As PSMButtonState
-                ReadOnly Property m_L2Button As PSMButtonState
-                ReadOnly Property m_R2Button As PSMButtonState
-                ReadOnly Property m_L3Button As PSMButtonState
-                ReadOnly Property m_R3Button As PSMButtonState
+                ReadOnly Property m_L1Button As Constants.PSMButtonState
+                ReadOnly Property m_R1Button As Constants.PSMButtonState
+                ReadOnly Property m_L2Button As Constants.PSMButtonState
+                ReadOnly Property m_R2Button As Constants.PSMButtonState
+                ReadOnly Property m_L3Button As Constants.PSMButtonState
+                ReadOnly Property m_R3Button As Constants.PSMButtonState
 
-                ReadOnly Property m_ShareButton As PSMButtonState
-                ReadOnly Property m_OptionsButton As PSMButtonState
+                ReadOnly Property m_ShareButton As Constants.PSMButtonState
+                ReadOnly Property m_OptionsButton As Constants.PSMButtonState
 
-                ReadOnly Property m_PSButton As PSMButtonState
-                ReadOnly Property m_TrackPadButton As PSMButtonState
+                ReadOnly Property m_PSButton As Constants.PSMButtonState
+                ReadOnly Property m_TrackPadButton As Constants.PSMButtonState
 
 
                 ReadOnly Property m_LeftAnalogX As Single
@@ -430,17 +436,17 @@ Partial Public Class PSMoveServiceExCAPI
                     m_StickYAxis = CBool(_FromPinvoke.StickYAxis)
                 End Sub
 
-                ReadOnly Property m_L1Button As PSMButtonState
-                ReadOnly Property m_L2Button As PSMButtonState
-                ReadOnly Property m_L3Button As PSMButtonState
-                ReadOnly Property m_CircleButton As PSMButtonState
-                ReadOnly Property m_CrossButton As PSMButtonState
-                ReadOnly Property m_PSButton As PSMButtonState
-                ReadOnly Property m_TriggerButton As PSMButtonState
-                ReadOnly Property m_DPadUpButton As PSMButtonState
-                ReadOnly Property m_DPadRightButton As PSMButtonState
-                ReadOnly Property m_DPadDownButton As PSMButtonState
-                ReadOnly Property m_DPadLeftButton As PSMButtonState
+                ReadOnly Property m_L1Button As Constants.PSMButtonState
+                ReadOnly Property m_L2Button As Constants.PSMButtonState
+                ReadOnly Property m_L3Button As Constants.PSMButtonState
+                ReadOnly Property m_CircleButton As Constants.PSMButtonState
+                ReadOnly Property m_CrossButton As Constants.PSMButtonState
+                ReadOnly Property m_PSButton As Constants.PSMButtonState
+                ReadOnly Property m_TriggerButton As Constants.PSMButtonState
+                ReadOnly Property m_DPadUpButton As Constants.PSMButtonState
+                ReadOnly Property m_DPadRightButton As Constants.PSMButtonState
+                ReadOnly Property m_DPadDownButton As Constants.PSMButtonState
+                ReadOnly Property m_DPadLeftButton As Constants.PSMButtonState
 
                 ReadOnly Property m_TriggerValue As Boolean
                 ReadOnly Property m_StickXAxis As Boolean
@@ -450,8 +456,8 @@ Partial Public Class PSMoveServiceExCAPI
             Class PSVirtualState
                 Implements IPSState
 
-                Private g_bAxisStates(PSM_MAX_VIRTUAL_CONTROLLER_AXES) As Byte
-                Private g_iButtonStates(PSM_MAX_VIRTUAL_CONTROLLER_BUTTONS) As Integer
+                Private ReadOnly g_bAxisStates(Constants.PSM_MAX_VIRTUAL_CONTROLLER_AXES) As Byte
+                Private ReadOnly g_iButtonStates(Constants.PSM_MAX_VIRTUAL_CONTROLLER_BUTTONS) As Integer
 
                 Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMVirtualController)
                     m_bIsTrackingEnabled = CBool(_FromPinvoke.bIsTrackingEnabled)
@@ -489,13 +495,14 @@ Partial Public Class PSMoveServiceExCAPI
                         Return CBool(g_bAxisStates(i))
                     End Get
                 End Property
+
                 ReadOnly Property m_ButtonStates(i As Integer) As Integer
                     Get
                         Return g_iButtonStates(i)
                     End Get
                 End Property
 
-                ReadOnly Property m_TrackingColorType As PSMTrackingColorType
+                ReadOnly Property m_TrackingColorType As Constants.PSMTrackingColorType
             End Class
 
             Class PSPose
@@ -504,8 +511,8 @@ Partial Public Class PSMoveServiceExCAPI
                     m_Orientation = m_Orientation.FromPinvoke(_FromPinvoke.Orientation)
                 End Sub
 
-                ReadOnly Property m_Position As PSMVector3f
-                ReadOnly Property m_Orientation As PSMQuatf
+                ReadOnly Property m_Position As Constants.PSMVector3f
+                ReadOnly Property m_Orientation As Constants.PSMQuatf
             End Class
 
             Class PSRawSensor
@@ -514,8 +521,10 @@ Partial Public Class PSMoveServiceExCAPI
                     m_Gyroscope = Nothing
 
                     m_LinearVelocityCmPerSec = m_LinearVelocityCmPerSec.FromPinvoke(_FromPinvoke.LinearVelocityCmPerSec)
-                    m_LinearAccelerationCmPerSecSqr = m_LinearAccelerationCmPerSecSqr.FromPinvoke(_FromPinvoke.LinearAccelerationCmPerSecSqr)
-                    m_AngularVelocityRadPerSec = m_AngularVelocityRadPerSec.FromPinvoke(_FromPinvoke.AngularVelocityRadPerSec)
+                    m_LinearAccelerationCmPerSecSqr =
+                        m_LinearAccelerationCmPerSecSqr.FromPinvoke(_FromPinvoke.LinearAccelerationCmPerSecSqr)
+                    m_AngularVelocityRadPerSec =
+                        m_AngularVelocityRadPerSec.FromPinvoke(_FromPinvoke.AngularVelocityRadPerSec)
                     m_TimeInSeconds = _FromPinvoke.TimeInSeconds
                 End Sub
 
@@ -529,12 +538,12 @@ Partial Public Class PSMoveServiceExCAPI
                     m_TimeInSeconds = _FromPinvoke.TimeInSeconds
                 End Sub
 
-                ReadOnly Property m_Accelerometer As PSMVector3i
-                ReadOnly Property m_Gyroscope As PSMVector3i
+                ReadOnly Property m_Accelerometer As Constants.PSMVector3i
+                ReadOnly Property m_Gyroscope As Constants.PSMVector3i
 
-                ReadOnly Property m_LinearVelocityCmPerSec As PSMVector3i
-                ReadOnly Property m_LinearAccelerationCmPerSecSqr As PSMVector3i
-                ReadOnly Property m_AngularVelocityRadPerSec As PSMVector3i
+                ReadOnly Property m_LinearVelocityCmPerSec As Constants.PSMVector3i
+                ReadOnly Property m_LinearAccelerationCmPerSecSqr As Constants.PSMVector3i
+                ReadOnly Property m_AngularVelocityRadPerSec As Constants.PSMVector3i
                 ReadOnly Property m_TimeInSeconds As Double
             End Class
 
@@ -553,46 +562,53 @@ Partial Public Class PSMoveServiceExCAPI
                     m_TimeInSeconds = _FromPinvoke.TimeInSeconds
                 End Sub
 
-                ReadOnly Property m_Magnetometer As PSMVector3f
-                ReadOnly Property m_Accelerometer As PSMVector3f
-                ReadOnly Property m_Gyroscope As PSMVector3f
+                ReadOnly Property m_Magnetometer As Constants.PSMVector3f
+                ReadOnly Property m_Accelerometer As Constants.PSMVector3f
+                ReadOnly Property m_Gyroscope As Constants.PSMVector3f
                 ReadOnly Property m_TimeInSeconds As Double
             End Class
 
             Class PSPhysics
                 Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMPhysicsData)
                     m_LinearVelocityCmPerSec = m_LinearVelocityCmPerSec.FromPinvoke(_FromPinvoke.LinearVelocityCmPerSec)
-                    m_LinearAccelerationCmPerSecSqr = m_LinearAccelerationCmPerSecSqr.FromPinvoke(_FromPinvoke.LinearAccelerationCmPerSecSqr)
-                    m_AngularVelocityRadPerSec = m_AngularVelocityRadPerSec.FromPinvoke(_FromPinvoke.AngularVelocityRadPerSec)
-                    m_AngularAccelerationRadPerSecSqr = m_AngularAccelerationRadPerSecSqr.FromPinvoke(_FromPinvoke.AngularAccelerationRadPerSecSqr)
+                    m_LinearAccelerationCmPerSecSqr =
+                        m_LinearAccelerationCmPerSecSqr.FromPinvoke(_FromPinvoke.LinearAccelerationCmPerSecSqr)
+                    m_AngularVelocityRadPerSec =
+                        m_AngularVelocityRadPerSec.FromPinvoke(_FromPinvoke.AngularVelocityRadPerSec)
+                    m_AngularAccelerationRadPerSecSqr =
+                        m_AngularAccelerationRadPerSecSqr.FromPinvoke(_FromPinvoke.AngularAccelerationRadPerSecSqr)
                     m_TimeInSeconds = _FromPinvoke.TimeInSeconds
                 End Sub
 
-                ReadOnly Property m_LinearVelocityCmPerSec As PSMVector3f
-                ReadOnly Property m_LinearAccelerationCmPerSecSqr As PSMVector3f
-                ReadOnly Property m_AngularVelocityRadPerSec As PSMVector3f
-                ReadOnly Property m_AngularAccelerationRadPerSecSqr As PSMVector3f
+                ReadOnly Property m_LinearVelocityCmPerSec As Constants.PSMVector3f
+                ReadOnly Property m_LinearAccelerationCmPerSecSqr As Constants.PSMVector3f
+                ReadOnly Property m_AngularVelocityRadPerSec As Constants.PSMVector3f
+                ReadOnly Property m_AngularAccelerationRadPerSecSqr As Constants.PSMVector3f
                 ReadOnly Property m_TimeInSeconds As Double
             End Class
 
             Class PSTracking
-                Private g_mTrackingProjection As Object
-                Private g_iShape As PSMShape = PSMShape.PSMShape_INVALID_PROJECTION
+                Private ReadOnly g_mTrackingProjection As Object
+                Private ReadOnly g_iShape As Constants.PSMShape = Constants.PSMShape.PSMShape_INVALID_PROJECTION
 
                 Sub New(_FromPinvoke As Object)
                     Select Case (True)
                         Case (TypeOf _FromPinvoke Is PInvoke.PINVOKE_PSMRawTrackerDataEllipse)
                             Dim _FromPinvokeEllipse = DirectCast(_FromPinvoke, PInvoke.PINVOKE_PSMRawTrackerDataEllipse)
 
-                            g_iShape = PSMShape.PSMShape_Ellipse
+                            g_iShape = Constants.PSMShape.PSMShape_Ellipse
 
                             m_TrackerID = _FromPinvokeEllipse.TrackerID
                             m_ScreenLocation = m_ScreenLocation.FromPinvoke(_FromPinvokeEllipse.ScreenLocation)
-                            m_RelativePositionCm = m_RelativePositionCm.FromPinvoke(_FromPinvokeEllipse.RelativePositionCm)
-                            m_RelativeOrientation = m_RelativeOrientation.FromPinvoke(_FromPinvokeEllipse.RelativeOrientation)
+                            m_RelativePositionCm =
+                                m_RelativePositionCm.FromPinvoke(_FromPinvokeEllipse.RelativePositionCm)
+                            m_RelativeOrientation =
+                                m_RelativeOrientation.FromPinvoke(_FromPinvokeEllipse.RelativeOrientation)
                             m_ValidTrackerBitmask = _FromPinvokeEllipse.ValidTrackerBitmask
-                            m_MulticamPositionCm = m_MulticamPositionCm.FromPinvoke(_FromPinvokeEllipse.MulticamPositionCm)
-                            m_MulticamOrientation = m_MulticamOrientation.FromPinvoke(_FromPinvokeEllipse.MulticamOrientation)
+                            m_MulticamPositionCm =
+                                m_MulticamPositionCm.FromPinvoke(_FromPinvokeEllipse.MulticamPositionCm)
+                            m_MulticamOrientation =
+                                m_MulticamOrientation.FromPinvoke(_FromPinvokeEllipse.MulticamOrientation)
                             m_bMulticamPositionValid = CBool(_FromPinvokeEllipse.bMulticamPositionValid)
                             m_bMulticamOrientationValid = CBool(_FromPinvokeEllipse.bMulticamOrientationValid)
 
@@ -604,23 +620,29 @@ Partial Public Class PSMoveServiceExCAPI
                             g_mTrackingProjection = i
 
                         Case (TypeOf _FromPinvoke Is PInvoke.PINVOKE_PSMRawTrackerDataLightbar)
-                            Dim _FromPinvokeLightbar = DirectCast(_FromPinvoke, PInvoke.PINVOKE_PSMRawTrackerDataLightbar)
+                            Dim _FromPinvokeLightbar = DirectCast(_FromPinvoke,
+                                                                  PInvoke.PINVOKE_PSMRawTrackerDataLightbar)
 
-                            g_iShape = PSMShape.PSMShape_LightBar
+                            g_iShape = Constants.PSMShape.PSMShape_LightBar
 
                             m_TrackerID = _FromPinvokeLightbar.TrackerID
                             m_ScreenLocation = m_ScreenLocation.FromPinvoke(_FromPinvokeLightbar.ScreenLocation)
-                            m_RelativePositionCm = m_RelativePositionCm.FromPinvoke(_FromPinvokeLightbar.RelativePositionCm)
-                            m_RelativeOrientation = m_RelativeOrientation.FromPinvoke(_FromPinvokeLightbar.RelativeOrientation)
+                            m_RelativePositionCm =
+                                m_RelativePositionCm.FromPinvoke(_FromPinvokeLightbar.RelativePositionCm)
+                            m_RelativeOrientation =
+                                m_RelativeOrientation.FromPinvoke(_FromPinvokeLightbar.RelativeOrientation)
                             m_ValidTrackerBitmask = _FromPinvokeLightbar.ValidTrackerBitmask
-                            m_MulticamPositionCm = m_MulticamPositionCm.FromPinvoke(_FromPinvokeLightbar.MulticamPositionCm)
-                            m_MulticamOrientation = m_MulticamOrientation.FromPinvoke(_FromPinvokeLightbar.MulticamOrientation)
+                            m_MulticamPositionCm =
+                                m_MulticamPositionCm.FromPinvoke(_FromPinvokeLightbar.MulticamPositionCm)
+                            m_MulticamOrientation =
+                                m_MulticamOrientation.FromPinvoke(_FromPinvokeLightbar.MulticamOrientation)
                             m_bMulticamPositionValid = CBool(_FromPinvokeLightbar.bMulticamPositionValid)
                             m_bMulticamOrientationValid = CBool(_FromPinvokeLightbar.bMulticamOrientationValid)
 
                             Dim i As New PSMTrackingProjectionLightbar()
                             For j = 0 To _FromPinvokeLightbar.TrackingProjection.triangle.Length - 1
-                                i.mTriangle(j) = i.mTriangle(j).FromPinvoke(_FromPinvokeLightbar.TrackingProjection.triangle(j))
+                                i.mTriangle(j) =
+                                    i.mTriangle(j).FromPinvoke(_FromPinvokeLightbar.TrackingProjection.triangle(j))
                             Next
                             For j = 0 To _FromPinvokeLightbar.TrackingProjection.quad.Length - 1
                                 i.mQuad(j) = i.mQuad(j).FromPinvoke(_FromPinvokeLightbar.TrackingProjection.quad(j))
@@ -628,31 +650,36 @@ Partial Public Class PSMoveServiceExCAPI
                             g_mTrackingProjection = i
 
                         Case (TypeOf _FromPinvoke Is PInvoke.PINVOKE_PSMRawTrackerDataPointcloud)
-                            Dim _FromPinvokePointcloud = DirectCast(_FromPinvoke, PInvoke.PINVOKE_PSMRawTrackerDataPointcloud)
+                            Dim _FromPinvokePointcloud = DirectCast(_FromPinvoke,
+                                                                    PInvoke.PINVOKE_PSMRawTrackerDataPointcloud)
 
-                            g_iShape = PSMShape.PSMShape_PointCloud
+                            g_iShape = Constants.PSMShape.PSMShape_PointCloud
 
                             m_TrackerID = _FromPinvokePointcloud.TrackerID
                             m_ScreenLocation = m_ScreenLocation.FromPinvoke(_FromPinvokePointcloud.ScreenLocation)
-                            m_RelativePositionCm = m_RelativePositionCm.FromPinvoke(_FromPinvokePointcloud.RelativePositionCm)
-                            m_RelativeOrientation = m_RelativeOrientation.FromPinvoke(_FromPinvokePointcloud.RelativeOrientation)
+                            m_RelativePositionCm =
+                                m_RelativePositionCm.FromPinvoke(_FromPinvokePointcloud.RelativePositionCm)
+                            m_RelativeOrientation =
+                                m_RelativeOrientation.FromPinvoke(_FromPinvokePointcloud.RelativeOrientation)
                             m_ValidTrackerBitmask = _FromPinvokePointcloud.ValidTrackerBitmask
-                            m_MulticamPositionCm = m_MulticamPositionCm.FromPinvoke(_FromPinvokePointcloud.MulticamPositionCm)
-                            m_MulticamOrientation = m_MulticamOrientation.FromPinvoke(_FromPinvokePointcloud.MulticamOrientation)
+                            m_MulticamPositionCm =
+                                m_MulticamPositionCm.FromPinvoke(_FromPinvokePointcloud.MulticamPositionCm)
+                            m_MulticamOrientation =
+                                m_MulticamOrientation.FromPinvoke(_FromPinvokePointcloud.MulticamOrientation)
                             m_bMulticamPositionValid = CBool(_FromPinvokePointcloud.bMulticamPositionValid)
                             m_bMulticamOrientationValid = CBool(_FromPinvokePointcloud.bMulticamOrientationValid)
 
                             Dim i As New PSMTrackingProjectionPointcloud()
                             For j = 0 To _FromPinvokePointcloud.TrackingProjection.points.Length - 1
-                                i.mPoints(j) = i.mPoints(j).FromPinvoke(_FromPinvokePointcloud.TrackingProjection.points(j))
+                                i.mPoints(j) =
+                                    i.mPoints(j).FromPinvoke(_FromPinvokePointcloud.TrackingProjection.points(j))
                             Next
                             i.iPointCount = _FromPinvokePointcloud.TrackingProjection.point_count
                             g_mTrackingProjection = i
 
                         Case Else
-                            g_iShape = PSMShape.PSMShape_INVALID_PROJECTION
+                            g_iShape = Constants.PSMShape.PSMShape_INVALID_PROJECTION
                     End Select
-
                 End Sub
 
                 Public Interface IPSMTrackingProjectiomShape
@@ -661,7 +688,7 @@ Partial Public Class PSMoveServiceExCAPI
                 Public Class PSMTrackingProjectionEllipse
                     Implements IPSMTrackingProjectiomShape
 
-                    Public mCenter As PSMVector2f
+                    Public mCenter As Constants.PSMVector2f
                     Public fHalf_X_Extent As Single
                     Public fHalf_Y_Extent As Single
                     Public fAngle As Single
@@ -670,39 +697,39 @@ Partial Public Class PSMoveServiceExCAPI
                 Public Class PSMTrackingProjectionLightbar
                     Implements IPSMTrackingProjectiomShape
 
-                    Public mTriangle(3) As PSMVector2f
-                    Public mQuad(3) As PSMVector2f
+                    Public mTriangle(3) As Constants.PSMVector2f
+                    Public mQuad(3) As Constants.PSMVector2f
                 End Class
 
                 Public Class PSMTrackingProjectionPointcloud
                     Implements IPSMTrackingProjectiomShape
 
-                    Public mPoints(7) As PSMVector2f
+                    Public mPoints(7) As Constants.PSMVector2f
                     Public iPointCount As Integer
                 End Class
 
                 ReadOnly Property m_TrackerID As Integer
-                ReadOnly Property m_ScreenLocation As PSMVector2f
-                ReadOnly Property m_RelativePositionCm As PSMVector3f
-                ReadOnly Property m_RelativeOrientation As PSMQuatf
+                ReadOnly Property m_ScreenLocation As Constants.PSMVector2f
+                ReadOnly Property m_RelativePositionCm As Constants.PSMVector3f
+                ReadOnly Property m_RelativeOrientation As Constants.PSMQuatf
                 ReadOnly Property m_ValidTrackerBitmask As UInteger
-                ReadOnly Property m_MulticamPositionCm As PSMVector3f
-                ReadOnly Property m_MulticamOrientation As PSMQuatf
+                ReadOnly Property m_MulticamPositionCm As Constants.PSMVector3f
+                ReadOnly Property m_MulticamOrientation As Constants.PSMQuatf
                 ReadOnly Property m_bMulticamPositionValid As Boolean
                 ReadOnly Property m_bMulticamOrientationValid As Boolean
 
-                Public Function GetTrackingProjection(Of IPSMTrackingProjectiomShape)() As IPSMTrackingProjectiomShape
+                Public Function GetTrackingProjection (Of IPSMTrackingProjectiomShape)() As IPSMTrackingProjectiomShape
                     Return DirectCast(g_mTrackingProjection, IPSMTrackingProjectiomShape)
                 End Function
 
-                ReadOnly Property m_Shape() As PSMShape
+                ReadOnly Property m_Shape As Constants.PSMShape
                     Get
                         Return g_iShape
                     End Get
                 End Property
             End Class
 
-            Public Function GetPSState(Of IPSState)() As IPSState
+            Public Function GetPSState (Of IPSState)() As IPSState
                 Return DirectCast(g_PSState, IPSState)
             End Function
 
@@ -731,8 +758,10 @@ Partial Public Class PSMoveServiceExCAPI
                     Dim iSize = Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMControllerList))
                     Dim hPtr As IntPtr = Marshal.AllocHGlobal(iSize)
                     Try
-                        If (CType(PInvoke.PSM_GetControllerList(hPtr, Constants.PSM_DEFAULT_TIMEOUT), PSMResult) = PSMResult.PSMResult_Success) Then
-                            Dim mControllerList = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMControllerList)(hPtr)
+                        If _
+                            (CType(PInvoke.PSM_GetControllerList(hPtr, Constants.PSM_DEFAULT_TIMEOUT),
+                                   Constants.PSMResult) = Constants.PSMResult.PSMResult_Success) Then
+                            Dim mControllerList = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMControllerList)(hPtr)
 
                             For i = 0 To mControllerList.count - 1
                                 If (mControllerList.controller_id(i) <> m_ControllerId) Then
@@ -752,8 +781,9 @@ Partial Public Class PSMoveServiceExCAPI
                 If ((iRefreshType And RefreshFlags.RefreshType_Basic) > 0) Then
                     Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMController)))
                     Try
-                        If (PInvoke.PSM_GetControllerEx(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                            Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMController)(hPtr)
+                        If (PInvoke.PSM_GetControllerEx(m_ControllerId, hPtr) = Constants.PSMResult.PSMResult_Success) _
+                            Then
+                            Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMController)(hPtr)
 
                             g_iControllerType = mData.ControllerType
                             g_iOutputSequenceNum = mData.OutputSequenceNum
@@ -770,11 +800,13 @@ Partial Public Class PSMoveServiceExCAPI
 
                 If ((iRefreshType And RefreshFlags.RefreshType_State) > 0) Then
                     Select Case (g_iControllerType)
-                        Case PSMControllerType.PSMController_Move
+                        Case Constants.PSMControllerType.PSMController_Move
                             Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMove)))
                             Try
-                                If (PInvoke.PSM_GetControllerPSMoveStateEx(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSMove)(hPtr)
+                                If _
+                                    (PInvoke.PSM_GetControllerPSMoveStateEx(m_ControllerId, hPtr) =
+                                     Constants.PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMPSMove)(hPtr)
 
                                     g_PSState = New PSMoveState(mData)
                                 End If
@@ -782,33 +814,41 @@ Partial Public Class PSMoveServiceExCAPI
                                 Marshal.FreeHGlobal(hPtr)
                             End Try
 
-                        Case PSMControllerType.PSMController_DualShock4
-                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMDualShock4)))
+                        Case Constants.PSMControllerType.PSMController_DualShock4
+                            Dim hPtr As IntPtr =
+                                    Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMDualShock4)))
                             Try
-                                If (PInvoke.PSM_GetControllerDualShock4StateEx(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMDualShock4)(hPtr)
+                                If _
+                                    (PInvoke.PSM_GetControllerDualShock4StateEx(m_ControllerId, hPtr) =
+                                     Constants.PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMDualShock4)(hPtr)
 
                                     g_PSState = New PSDualShock4State(mData)
                                 End If
                             Finally
                                 Marshal.FreeHGlobal(hPtr)
                             End Try
-                        Case PSMControllerType.PSMController_Navi
+                        Case Constants.PSMControllerType.PSMController_Navi
                             Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSNavi)))
                             Try
-                                If (PInvoke.PSM_GetControllerPSNaviState(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSNavi)(hPtr)
+                                If _
+                                    (PInvoke.PSM_GetControllerPSNaviState(m_ControllerId, hPtr) =
+                                     Constants.PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMPSNavi)(hPtr)
 
                                     g_PSState = New PSNaviState(mData)
                                 End If
                             Finally
                                 Marshal.FreeHGlobal(hPtr)
                             End Try
-                        Case PSMControllerType.PSMController_Virtual
-                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMVirtualController)))
+                        Case Constants.PSMControllerType.PSMController_Virtual
+                            Dim hPtr As IntPtr =
+                                    Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMVirtualController)))
                             Try
-                                If (PInvoke.PSM_GetControllerVirtualControllerStateEx(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMVirtualController)(hPtr)
+                                If _
+                                    (PInvoke.PSM_GetControllerVirtualControllerStateEx(m_ControllerId, hPtr) =
+                                     Constants.PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMVirtualController)(hPtr)
 
                                     g_PSState = New PSVirtualState(mData)
                                 End If
@@ -822,8 +862,9 @@ Partial Public Class PSMoveServiceExCAPI
                 If ((iRefreshType And RefreshFlags.RefreshType_Pose) > 0) Then
                     Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPosef)))
                     Try
-                        If (PInvoke.PSM_GetControllerPose(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                            Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPosef)(hPtr)
+                        If (PInvoke.PSM_GetControllerPose(m_ControllerId, hPtr) = Constants.PSMResult.PSMResult_Success) _
+                            Then
+                            Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMPosef)(hPtr)
 
 
                             g_Pose = New PSPose(mData)
@@ -836,8 +877,10 @@ Partial Public Class PSMoveServiceExCAPI
                 If ((iRefreshType And RefreshFlags.RefreshType_Physics) > 0) Then
                     Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPhysicsData)))
                     Try
-                        If (PInvoke.PSM_GetControllerPhysicsData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                            Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPhysicsData)(hPtr)
+                        If _
+                            (PInvoke.PSM_GetControllerPhysicsData(m_ControllerId, hPtr) =
+                             Constants.PSMResult.PSMResult_Success) Then
+                            Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMPhysicsData)(hPtr)
 
                             g_Physics = New PSPhysics(mData)
                         End If
@@ -848,22 +891,28 @@ Partial Public Class PSMoveServiceExCAPI
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Sensor) > 0) Then
                     Select Case (g_iControllerType)
-                        Case PSMControllerType.PSMController_Move
-                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMoveRawSensorData)))
+                        Case Constants.PSMControllerType.PSMController_Move
+                            Dim hPtr As IntPtr =
+                                    Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMoveRawSensorData)))
                             Try
-                                If (PInvoke.PSM_GetControllerPSMoveRawSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSMoveRawSensorData)(hPtr)
+                                If _
+                                    (PInvoke.PSM_GetControllerPSMoveRawSensorData(m_ControllerId, hPtr) =
+                                     Constants.PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMPSMoveRawSensorData)(hPtr)
 
                                     g_PSRawSensor = New PSRawSensor(mData)
                                 End If
                             Finally
                                 Marshal.FreeHGlobal(hPtr)
                             End Try
-                        Case PSMControllerType.PSMController_DualShock4
-                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMDS4RawSensorData)))
+                        Case Constants.PSMControllerType.PSMController_DualShock4
+                            Dim hPtr As IntPtr =
+                                    Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMDS4RawSensorData)))
                             Try
-                                If (PInvoke.PSM_GetControllerPSMoveRawSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMDS4RawSensorData)(hPtr)
+                                If _
+                                    (PInvoke.PSM_GetControllerPSMoveRawSensorData(m_ControllerId, hPtr) =
+                                     Constants.PSMResult.PSMResult_Success) Then
+                                    Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMDS4RawSensorData)(hPtr)
 
                                     g_PSRawSensor = New PSRawSensor(mData)
                                 End If
@@ -875,22 +924,33 @@ Partial Public Class PSMoveServiceExCAPI
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Sensor) > 0) Then
                     Select Case (g_iControllerType)
-                        Case PSMControllerType.PSMController_Move
-                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMoveCalibratedSensorData)))
+                        Case Constants.PSMControllerType.PSMController_Move
+                            Dim hPtr As IntPtr =
+                                    Marshal.AllocHGlobal(
+                                        Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPSMoveCalibratedSensorData)))
                             Try
-                                If (PInvoke.PSM_GetControllerPSMoveSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPSMoveCalibratedSensorData)(hPtr)
+                                If _
+                                    (PInvoke.PSM_GetControllerPSMoveSensorData(m_ControllerId, hPtr) =
+                                     Constants.PSMResult.PSMResult_Success) Then
+                                    Dim mData =
+                                            Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMPSMoveCalibratedSensorData)(
+                                                hPtr)
 
                                     g_PSCalibratedSensor = New PSCalibratedSensor(mData)
                                 End If
                             Finally
                                 Marshal.FreeHGlobal(hPtr)
                             End Try
-                        Case PSMControllerType.PSMController_DualShock4
-                            Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMDS4CalibratedSensorData)))
+                        Case Constants.PSMControllerType.PSMController_DualShock4
+                            Dim hPtr As IntPtr =
+                                    Marshal.AllocHGlobal(
+                                        Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMDS4CalibratedSensorData)))
                             Try
-                                If (PInvoke.PSM_GetControllerPSMoveSensorData(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMDS4CalibratedSensorData)(hPtr)
+                                If _
+                                    (PInvoke.PSM_GetControllerPSMoveSensorData(m_ControllerId, hPtr) =
+                                     Constants.PSMResult.PSMResult_Success) Then
+                                    Dim mData =
+                                            Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMDS4CalibratedSensorData)(hPtr)
 
                                     g_PSCalibratedSensor = New PSCalibratedSensor(mData)
                                 End If
@@ -901,14 +961,22 @@ Partial Public Class PSMoveServiceExCAPI
                 End If
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Tracker) > 0) Then
-                    Dim iShape As Integer = PSMShape.PSMShape_INVALID_PROJECTION
-                    If (PInvoke.PSM_GetControllerRawTrackerShape(m_ControllerId, iShape) = PSMResult.PSMResult_Success) Then
+                    Dim iShape As Integer = Constants.PSMShape.PSMShape_INVALID_PROJECTION
+                    If _
+                        (PInvoke.PSM_GetControllerRawTrackerShape(m_ControllerId, iShape) =
+                         Constants.PSMResult.PSMResult_Success) Then
                         Select Case (iShape)
-                            Case PSMShape.PSMShape_Ellipse
-                                Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMRawTrackerDataEllipse)))
+                            Case Constants.PSMShape.PSMShape_Ellipse
+                                Dim hPtr As IntPtr =
+                                        Marshal.AllocHGlobal(
+                                            Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMRawTrackerDataEllipse)))
                                 Try
-                                    If (PInvoke.PSM_GetControllerRawTrackerDataEllipse(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                        Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMRawTrackerDataEllipse)(hPtr)
+                                    If _
+                                        (PInvoke.PSM_GetControllerRawTrackerDataEllipse(m_ControllerId, hPtr) =
+                                         Constants.PSMResult.PSMResult_Success) Then
+                                        Dim mData =
+                                                Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMRawTrackerDataEllipse)(
+                                                    hPtr)
 
                                         g_PSTracking = New PSTracking(mData)
                                     End If
@@ -917,11 +985,17 @@ Partial Public Class PSMoveServiceExCAPI
                                     Marshal.FreeHGlobal(hPtr)
                                 End Try
 
-                            Case PSMShape.PSMShape_LightBar
-                                Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMRawTrackerDataLightbar)))
+                            Case Constants.PSMShape.PSMShape_LightBar
+                                Dim hPtr As IntPtr =
+                                        Marshal.AllocHGlobal(
+                                            Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMRawTrackerDataLightbar)))
                                 Try
-                                    If (PInvoke.PSM_GetControllerRawTrackerDataLightbar(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                        Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMRawTrackerDataLightbar)(hPtr)
+                                    If _
+                                        (PInvoke.PSM_GetControllerRawTrackerDataLightbar(m_ControllerId, hPtr) =
+                                         Constants.PSMResult.PSMResult_Success) Then
+                                        Dim mData =
+                                                Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMRawTrackerDataLightbar)(
+                                                    hPtr)
 
                                         g_PSTracking = New PSTracking(mData)
                                     End If
@@ -930,11 +1004,17 @@ Partial Public Class PSMoveServiceExCAPI
                                     Marshal.FreeHGlobal(hPtr)
                                 End Try
 
-                            Case PSMShape.PSMShape_PointCloud
-                                Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMRawTrackerDataPointcloud)))
+                            Case Constants.PSMShape.PSMShape_PointCloud
+                                Dim hPtr As IntPtr =
+                                        Marshal.AllocHGlobal(
+                                            Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMRawTrackerDataPointcloud)))
                                 Try
-                                    If (PInvoke.PSM_GetControllerRawTrackerDataPointcloud(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                                        Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMRawTrackerDataPointcloud)(hPtr)
+                                    If _
+                                        (PInvoke.PSM_GetControllerRawTrackerDataPointcloud(m_ControllerId, hPtr) =
+                                         Constants.PSMResult.PSMResult_Success) Then
+                                        Dim mData =
+                                                Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMRawTrackerDataPointcloud)(
+                                                    hPtr)
 
                                         g_PSTracking = New PSTracking(mData)
                                     End If
@@ -952,7 +1032,7 @@ Partial Public Class PSMoveServiceExCAPI
             Get
                 Return g_bListening
             End Get
-            Set(value As Boolean)
+            Set
                 If (g_bListening = value) Then
                     Return
                 End If
@@ -960,22 +1040,26 @@ Partial Public Class PSMoveServiceExCAPI
                 g_bListening = value
 
                 If (g_bListening) Then
-                    If (PInvoke.PSM_AllocateControllerListener(g_mInfo.m_ControllerId) <> PSMResult.PSMResult_Success) Then
+                    If _
+                        (PInvoke.PSM_AllocateControllerListener(g_mInfo.m_ControllerId) <>
+                         Constants.PSMResult.PSMResult_Success) Then
                         Throw New ArgumentException("PSM_AllocateControllerListener failed")
                     End If
                 Else
-                    If (PInvoke.PSM_FreeControllerListener(g_mInfo.m_ControllerId) <> PSMResult.PSMResult_Success) Then
+                    If _
+                        (PInvoke.PSM_FreeControllerListener(g_mInfo.m_ControllerId) <>
+                         Constants.PSMResult.PSMResult_Success) Then
                         Throw New ArgumentException("PSM_FreeControllerListener failed")
                     End If
                 End If
             End Set
         End Property
 
-        Property m_DataStreamFlags As PSMStreamFlags
+        Property m_DataStreamFlags As Constants.PSMStreamFlags
             Get
                 Return g_iDataStreamFlags
             End Get
-            Set(value As PSMStreamFlags)
+            Set
                 If (g_iDataStreamFlags = value) Then
                     Return
                 End If
@@ -994,7 +1078,7 @@ Partial Public Class PSMoveServiceExCAPI
             Get
                 Return g_bDataStream
             End Get
-            Set(value As Boolean)
+            Set
                 If (g_bDataStream = value) Then
                     Return
                 End If
@@ -1002,11 +1086,16 @@ Partial Public Class PSMoveServiceExCAPI
                 g_bDataStream = value
 
                 If (g_bDataStream) Then
-                    If (PInvoke.PSM_StartControllerDataStream(g_mInfo.m_ControllerId, CUInt(m_DataStreamFlags), PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
+                    If _
+                        (PInvoke.PSM_StartControllerDataStream(g_mInfo.m_ControllerId, CUInt(m_DataStreamFlags),
+                                                               Constants.PSM_DEFAULT_TIMEOUT) <>
+                         Constants.PSMResult.PSMResult_Success) Then
                         Throw New ArgumentException("PSM_AllocateControllerListener failed")
                     End If
                 Else
-                    If (PInvoke.PSM_StopControllerDataStream(g_mInfo.m_ControllerId, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
+                    If _
+                        (PInvoke.PSM_StopControllerDataStream(g_mInfo.m_ControllerId, Constants.PSM_DEFAULT_TIMEOUT) <>
+                         Constants.PSMResult.PSMResult_Success) Then
                         Throw New ArgumentException("PSM_FreeControllerListener failed")
                     End If
                 End If
@@ -1014,14 +1103,17 @@ Partial Public Class PSMoveServiceExCAPI
         End Property
 
         Public Sub SetTrackerStream(iTrackerID As Integer)
-            If (PInvoke.PSM_SetControllerDataStreamTrackerIndex(m_Info.m_ControllerId, iTrackerID, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
+            If _
+                (PInvoke.PSM_SetControllerDataStreamTrackerIndex(m_Info.m_ControllerId, iTrackerID,
+                                                                 Constants.PSM_DEFAULT_TIMEOUT) <>
+                 Constants.PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_SetControllerDataStreamTrackerIndex failed")
             End If
 
             ' Start streams then if not already
             m_Listening = True
             m_DataStreamEnabled = True
-            m_DataStreamFlags = (m_DataStreamFlags Or PSMStreamFlags.PSMStreamFlags_includeRawTrackerData)
+            m_DataStreamFlags = (m_DataStreamFlags Or Constants.PSMStreamFlags.PSMStreamFlags_includeRawTrackerData)
         End Sub
 
         Public Function IsTrackerStreamingThisController(iTrackerID As Integer) As Boolean
@@ -1036,8 +1128,10 @@ Partial Public Class PSMoveServiceExCAPI
             Return (m_Info.m_PSTracking.m_TrackerID = iTrackerID)
         End Function
 
-        Public Sub SetControllerLEDTrackingColor(iColor As PSMTrackingColorType)
-            If (PInvoke.PSM_SetControllerLEDTrackingColor(m_Info.m_ControllerId, iColor, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
+        Public Sub SetControllerLEDTrackingColor(iColor As Constants.PSMTrackingColorType)
+            If _
+                (PInvoke.PSM_SetControllerLEDTrackingColor(m_Info.m_ControllerId, iColor, Constants.PSM_DEFAULT_TIMEOUT) <>
+                 Constants.PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_SetControllerLEDTrackingColor failed")
             End If
         End Sub
@@ -1047,16 +1141,20 @@ Partial Public Class PSMoveServiceExCAPI
         End Sub
 
         Public Sub SetControllerLEDOverrideColor(mColor As Color)
-            If (PInvoke.PSM_SetControllerLEDOverrideColor(m_Info.m_ControllerId, mColor.R, mColor.G, mColor.B) <> PSMResult.PSMResult_Success) Then
+            If _
+                (PInvoke.PSM_SetControllerLEDOverrideColor(m_Info.m_ControllerId, mColor.R, mColor.G, mColor.B) <>
+                 Constants.PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_SetControllerLEDTrackingColor failed")
             End If
         End Sub
 
-        Public Sub ResetControlerOrientation(mOrientation As PSMQuatf)
+        Public Sub ResetControlerOrientation(mOrientation As Constants.PSMQuatf)
             Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMQuatf)))
             Marshal.StructureToPtr(mOrientation.ToPinvoke(), hPtr, True)
             Try
-                If (PInvoke.PSM_ResetControllerOrientation(m_Info.m_ControllerId, hPtr, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
+                If _
+                    (PInvoke.PSM_ResetControllerOrientation(m_Info.m_ControllerId, hPtr, Constants.PSM_DEFAULT_TIMEOUT) <>
+                     Constants.PSMResult.PSMResult_Success) Then
                     Throw New ArgumentException("PSM_ResetControllerOrientation failed")
                 End If
             Finally
@@ -1064,14 +1162,16 @@ Partial Public Class PSMoveServiceExCAPI
             End Try
         End Sub
 
-        Public Function GetControllerRumble(iChannel As PSMControllerRumbleChannel) As Single
-            Dim fRumbleOut As Single = -1.0
+        Public Function GetControllerRumble(iChannel As Constants.PSMControllerRumbleChannel) As Single
+            Dim fRumbleOut As Single = - 1.0
             PInvoke.PSM_GetControllerRumble(m_Info.m_ControllerId, iChannel, fRumbleOut)
             Return fRumbleOut
         End Function
 
-        Public Sub SetControllerRumble(iChannel As PSMControllerRumbleChannel, fRumble As Single)
-            If (PInvoke.PSM_SetControllerRumble(m_Info.m_ControllerId, iChannel, fRumble) <> PSMResult.PSMResult_Success) Then
+        Public Sub SetControllerRumble(iChannel As Constants.PSMControllerRumbleChannel, fRumble As Single)
+            If _
+                (PInvoke.PSM_SetControllerRumble(m_Info.m_ControllerId, iChannel, fRumble) <>
+                 Constants.PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_SetControllerRumble failed")
             End If
         End Sub
@@ -1088,34 +1188,38 @@ Partial Public Class PSMoveServiceExCAPI
             Return CBool(bTracked)
         End Function
 
-        Public Function GetControllerPosition() As PSMVector3f
+        Public Function GetControllerPosition() As Constants.PSMVector3f
             Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMVector3f)))
             Try
-                If (PInvoke.PSM_GetControllerPosition(m_Info.m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMVector3f)(hPtr)
+                If _
+                    (PInvoke.PSM_GetControllerPosition(m_Info.m_ControllerId, hPtr) =
+                     Constants.PSMResult.PSMResult_Success) Then
+                    Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMVector3f)(hPtr)
 
-                    Return (New PSMVector3f()).FromPinvoke(mData)
+                    Return (New Constants.PSMVector3f()).FromPinvoke(mData)
                 End If
             Finally
                 Marshal.FreeHGlobal(hPtr)
             End Try
 
-            Return New PSMVector3f()
+            Return New Constants.PSMVector3f()
         End Function
 
-        Public Function GetControllerOrientation() As PSMQuatf
+        Public Function GetControllerOrientation() As Constants.PSMQuatf
             Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMQuatf)))
             Try
-                If (PInvoke.PSM_GetControllerOrientation(m_Info.m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                    Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMQuatf)(hPtr)
+                If _
+                    (PInvoke.PSM_GetControllerOrientation(m_Info.m_ControllerId, hPtr) =
+                     Constants.PSMResult.PSMResult_Success) Then
+                    Dim mData = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMQuatf)(hPtr)
 
-                    Return (New PSMQuatf()).FromPinvoke(mData)
+                    Return (New Constants.PSMQuatf()).FromPinvoke(mData)
                 End If
             Finally
                 Marshal.FreeHGlobal(hPtr)
             End Try
 
-            Return New PSMQuatf()
+            Return New Constants.PSMQuatf()
         End Function
 
         Public Shared Function GetControllerList() As Controllers()
@@ -1124,8 +1228,10 @@ Partial Public Class PSMoveServiceExCAPI
             Dim iSize = Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMControllerList))
             Dim hPtr As IntPtr = Marshal.AllocHGlobal(iSize)
             Try
-                If (CType(PInvoke.PSM_GetControllerList(hPtr, Constants.PSM_DEFAULT_TIMEOUT), PSMResult) = PSMResult.PSMResult_Success) Then
-                    Dim mControllerList = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMControllerList)(hPtr)
+                If _
+                    (CType(PInvoke.PSM_GetControllerList(hPtr, Constants.PSM_DEFAULT_TIMEOUT), Constants.PSMResult) =
+                     Constants.PSMResult.PSMResult_Success) Then
+                    Dim mControllerList = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMControllerList)(hPtr)
 
                     For i = 0 To mControllerList.count - 1
                         mControllers.Add(New Controllers(mControllerList.controller_id(i)))
@@ -1139,13 +1245,13 @@ Partial Public Class PSMoveServiceExCAPI
         End Function
 
         Public Shared Function GetValidControllerCount() As Integer
-            Dim iCount As Integer = 0
+            Dim iCount = 0
 
             Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMController)))
             Try
-                For i = 0 To PSMOVESERVICE_MAX_CONTROLLER_COUNT - 1
-                    If (PInvoke.PSM_GetControllerEx(i, hPtr) = PSMResult.PSMResult_Success) Then
-                        Dim controller = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMController)(hPtr)
+                For i = 0 To Constants.PSMOVESERVICE_MAX_CONTROLLER_COUNT - 1
+                    If (PInvoke.PSM_GetControllerEx(i, hPtr) = Constants.PSMResult.PSMResult_Success) Then
+                        Dim controller = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMController)(hPtr)
                         If (CBool(controller.bValid)) Then
                             iCount += 1
                         End If
@@ -1159,13 +1265,13 @@ Partial Public Class PSMoveServiceExCAPI
         End Function
 
         Public Shared Function GetConnectedControllerCount() As Integer
-            Dim iCount As Integer = 0
+            Dim iCount = 0
 
             Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMController)))
             Try
-                For i = 0 To PSMOVESERVICE_MAX_CONTROLLER_COUNT - 1
-                    If (PInvoke.PSM_GetControllerEx(i, hPtr) = PSMResult.PSMResult_Success) Then
-                        Dim controller = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMController)(hPtr)
+                For i = 0 To Constants.PSMOVESERVICE_MAX_CONTROLLER_COUNT - 1
+                    If (PInvoke.PSM_GetControllerEx(i, hPtr) = Constants.PSMResult.PSMResult_Success) Then
+                        Dim controller = Marshal.PtrToStructure (Of PInvoke.PINVOKE_PSMController)(hPtr)
                         If (CBool(controller.bValid) AndAlso CBool(controller.IsConnected)) Then
                             iCount += 1
                         End If
@@ -1187,13 +1293,14 @@ Partial Public Class PSMoveServiceExCAPI
 
             Try
                 m_DataStreamEnabled = False
-                m_DataStreamFlags = PSMStreamFlags.PSMStreamFlags_defaultStreamOptions
+                m_DataStreamFlags = Constants.PSMStreamFlags.PSMStreamFlags_defaultStreamOptions
             Catch ex As Exception
                 ' Connection probably already dropped.
             End Try
         End Sub
 
 #Region "IDisposable Support"
+
         Private disposedValue As Boolean ' To detect redundant calls
 
         ' IDisposable
@@ -1209,6 +1316,7 @@ Partial Public Class PSMoveServiceExCAPI
         Public Sub Dispose() Implements IDisposable.Dispose
             Dispose(True)
         End Sub
+
 #End Region
     End Class
 End Class

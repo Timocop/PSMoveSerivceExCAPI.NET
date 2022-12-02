@@ -1,8 +1,4 @@
-﻿Imports System.Drawing
-Imports System.Runtime.InteropServices
-Imports PSMoveServiceExCAPI.PSMoveServiceExCAPI.Constants
-
-Partial Public Class PSMoveServiceExCAPI
+﻿Partial Public Class PSMoveServiceExCAPI
     Public Class Constants
         Public Const PSM_DEFAULT_TIMEOUT = 1000
 
@@ -25,7 +21,6 @@ Partial Public Class PSMoveServiceExCAPI
 
         Public Const PSM_MAX_VIRTUAL_CONTROLLER_AXES = 32
         Public Const PSM_MAX_VIRTUAL_CONTROLLER_BUTTONS = 32
-
 
 
         Enum PSMShape
