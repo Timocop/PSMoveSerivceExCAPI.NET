@@ -12,7 +12,7 @@ Module Tests
             While True
                 Dim sLine As String
 
-                Console.WriteLine("[0-9] Controller to listen")
+                Console.WriteLine("Controller to listen [0-9]:")
                 sLine = Console.ReadLine()
 
                 If (String.IsNullOrEmpty(sLine)) Then
