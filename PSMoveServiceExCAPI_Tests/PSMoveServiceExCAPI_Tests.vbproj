@@ -136,5 +136,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\PSMoveServiceExCAPI\lib\PSMoveClient_CAPI.dll">
+      <Link>PSMoveClient_CAPI.dll</Link>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

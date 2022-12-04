@@ -7,8 +7,36 @@ Module Tests
         Try
             Dim mControllers As Controllers() = Nothing
             Dim iListenController As Integer = -1
+            Dim sHost As String = "127.0.0.1"
 
-            Using mService As New Service()
+            While True
+                Dim sLine As String
+
+                Console.WriteLine("[0-9] Controller to listen")
+                sLine = Console.ReadLine()
+
+                If (String.IsNullOrEmpty(sLine)) Then
+                    Continue While
+                End If
+
+                Dim iNum As Integer
+                If (Not Integer.TryParse(sLine, iNum)) Then
+                    Continue While
+                End If
+
+                iListenController = iNum
+
+                Console.WriteLine("Enter remote IP (leave blank for localhost): ")
+                sLine = Console.ReadLine()
+
+                If (Not String.IsNullOrEmpty(sLine)) Then
+                    sHost = sLine
+                End If
+
+                Exit While
+            End While
+
+            Using mService As New Service(sHost)
                 mService.Connect()
 
                 ' Get new list of controllers
@@ -20,35 +48,9 @@ Module Tests
                     mControllers(i).Refresh(RefreshFlags.RefreshType_ProbeSerial)
                 Next
 
-                While True
-                    Console.WriteLine(" --------------------------------- ")
-                    Console.WriteLine("Version: " & mService.GetClientProtocolVersion())
-                    Console.WriteLine("Total Controllers: " & mControllers.Length)
-                    Console.WriteLine(" --------------------------------- ")
-                    Console.WriteLine("[0-9] Controller to listen; [X] to exit")
-                    Dim sLine = Console.ReadLine()
-
-                    If (String.IsNullOrEmpty(sLine)) Then
-                        Continue While
-                    End If
-
-                    If (sLine.ToLowerInvariant = "x") Then
-                        Return
-                    End If
-
-                    Dim iNum As Integer
-                    If (Not Integer.TryParse(sLine, iNum)) Then
-                        Continue While
-                    End If
-
-                    iListenController = iNum
-
-                    If (iListenController < 0 OrElse iListenController > mControllers.Length - 1) Then
-                        Continue While
-                    End If
-
-                    Exit While
-                End While
+                If (iListenController < 0 OrElse iListenController > mControllers.Length - 1) Then
+                    Throw New ArgumentException("Controller id out of range")
+                End If
 
                 If (mControllers IsNot Nothing) Then
                     Dim mController As Controllers = mControllers(iListenController)
