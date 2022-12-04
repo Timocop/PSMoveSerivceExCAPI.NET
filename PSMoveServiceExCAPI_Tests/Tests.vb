@@ -11,53 +11,44 @@ Module Tests
             Using mService As New Service()
                 mService.Connect()
 
-                If (mControllers Is Nothing OrElse mService.HasControllerListChanged) Then
-                    ' Dispose old oudated list
-                    If (mControllers IsNot Nothing) Then
-                        For i = 0 To mControllers.Length - 1
-                            mControllers(i).Dispose()
-                        Next
+                ' Get new list of controllers
+                mControllers = Controllers.GetControllerList()
+
+                ' Controller list changed, try getting the serial from the controllers.
+                ' This is Networked and should only be used once.
+                For i = 0 To mControllers.Length - 1
+                    mControllers(i).Refresh(RefreshFlags.RefreshType_ProbeSerial)
+                Next
+
+                While True
+                    Console.WriteLine(" --------------------------------- ")
+                    Console.WriteLine("Version: " & mService.GetClientProtocolVersion())
+                    Console.WriteLine("Total Controllers: " & mControllers.Length)
+                    Console.WriteLine(" --------------------------------- ")
+                    Console.WriteLine("[0-9] Controller to listen; [X] to exit")
+                    Dim sLine = Console.ReadLine()
+
+                    If (String.IsNullOrEmpty(sLine)) Then
+                        Continue While
                     End If
 
-                    ' Get new list of controllers
-                    mControllers = Controllers.GetControllerList()
+                    If (sLine.ToLowerInvariant = "x") Then
+                        Return
+                    End If
 
-                    ' Controller list changed, try getting the serial from the controllers.
-                    ' This is Networked and should only be used once.
-                    For i = 0 To mControllers.Length - 1
-                        mControllers(i).Refresh(RefreshFlags.RefreshType_ProbeSerial)
-                    Next
+                    Dim iNum As Integer
+                    If (Not Integer.TryParse(sLine, iNum)) Then
+                        Continue While
+                    End If
 
-                    While True
-                        Console.WriteLine(" --------------------------------- ")
-                        Console.WriteLine("Version: " & mService.GetClientProtocolVersion())
-                        Console.WriteLine("Total Controllers: " & mControllers.Length)
-                        Console.WriteLine(" --------------------------------- ")
-                        Console.WriteLine("[0-9] Controller to listen; [X] to exit")
-                        Dim sLine = Console.ReadLine()
+                    iListenController = iNum
 
-                        If (String.IsNullOrEmpty(sLine)) Then
-                            Continue While
-                        End If
+                    If (iListenController < 0 OrElse iListenController > mControllers.Length - 1) Then
+                        Continue While
+                    End If
 
-                        If (sLine.ToLowerInvariant = "x") Then
-                            Return
-                        End If
-
-                        Dim iNum As Integer
-                        If (Not Integer.TryParse(sLine, iNum)) Then
-                            Continue While
-                        End If
-
-                        iListenController = iNum
-
-                        If (iListenController < 0 OrElse iListenController > mControllers.Length - 1) Then
-                            Continue While
-                        End If
-
-                        Exit While
-                    End While
-                End If
+                    Exit While
+                End While
 
                 If (mControllers IsNot Nothing) Then
                     Dim mController As Controllers = mControllers(iListenController)
@@ -83,6 +74,11 @@ Module Tests
                         ' Poll changes and refresh controller data
                         ' Use 'RefreshFlags' to optimize what you need to reduce API calls
                         mService.Update()
+
+                        If (mService.HasControllerListChanged) Then
+                            Throw New ArgumentException("Controller list has changed")
+                        End If
+
                         mController.Refresh(RefreshFlags.RefreshType_All)
 
                         Console.WriteLine(" --------------------------------- ")
@@ -95,8 +91,6 @@ Module Tests
                         If (mController.m_Info.IsStateValid()) Then
                             ' Get PSMove stuff
                             If (mController.m_Info.m_ControllerType = PSMControllerType.PSMController_Move) Then
-                                ' You can use 'm_PSMoveState' or 'GetPSState(Of PSMoveState)'
-                                'Dim mPSMoveState = mController.m_Info.m_PSMoveState
                                 Dim mPSMoveState = mController.m_Info.GetPSState(Of PSMoveState)
 
                                 Console.WriteLine("m_TriangleButton: " & mPSMoveState.m_TriangleButton.ToString)
