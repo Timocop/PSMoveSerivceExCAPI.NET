@@ -5,8 +5,8 @@ Partial Public Class PSMoveServiceExCAPI
     Class Service
         Implements IDisposable
 
-        Private ReadOnly g_sIP As String = ""
-        Private ReadOnly g_sPort As String = ""
+        Private g_sIP As String = ""
+        Private g_sPort As String = ""
 
         Private g_sServerProtocolVersion As String = Nothing
 
@@ -55,10 +55,7 @@ Partial Public Class PSMoveServiceExCAPI
             End If
 
             Dim sServerVersion As New StringBuilder(Constants.PSMOVESERVICE_MAX_VERSION_STRING_LEN)
-            If _
-                (PInvoke.PSM_GetServiceVersionString(sServerVersion, sServerVersion.Capacity,
-                                                     Constants.PSM_DEFAULT_TIMEOUT) <>
-                 Constants.PSMResult.PSMResult_Success) Then
+            If (PInvoke.PSM_GetServiceVersionString(sServerVersion, sServerVersion.Capacity, Constants.PSM_DEFAULT_TIMEOUT) <> Constants.PSMResult.PSMResult_Success) Then
                 Throw New ArgumentException("PSM_GetServiceVersionString failed")
             End If
 

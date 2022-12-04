@@ -1,29 +1,30 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Text
+Imports PSMoveServiceExCAPI.PSMoveServiceExCAPI.Constants
 
 Partial Public Class PSMoveServiceExCAPI
     Public Class PInvoke
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMVector2f
             Public x As Single
             Public y As Single
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMVector3f
             Public x As Single
             Public y As Single
             Public z As Single
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMVector3i
             Public x As Integer
             Public y As Integer
             Public z As Integer
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMQuatf
             Public w As Single
             Public x As Single
@@ -31,13 +32,13 @@ Partial Public Class PSMoveServiceExCAPI
             Public z As Single
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMPosef
             Public Position As PINVOKE_PSMVector3f
             Public Orientation As PINVOKE_PSMQuatf
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMPhysicsData
             Public LinearVelocityCmPerSec As PINVOKE_PSMVector3f
             Public LinearAccelerationCmPerSecSqr As PINVOKE_PSMVector3f
@@ -46,7 +47,7 @@ Partial Public Class PSMoveServiceExCAPI
             Public TimeInSeconds As Double
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMPSMoveRawSensorData
             Public LinearVelocityCmPerSec As PINVOKE_PSMVector3i
             Public LinearAccelerationCmPerSecSqr As PINVOKE_PSMVector3i
@@ -54,7 +55,7 @@ Partial Public Class PSMoveServiceExCAPI
             Public TimeInSeconds As Double
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMPSMoveCalibratedSensorData
             Public Magnetometer As PINVOKE_PSMVector3f
             Public Accelerometer As PINVOKE_PSMVector3f
@@ -62,7 +63,7 @@ Partial Public Class PSMoveServiceExCAPI
             Public TimeInSeconds As Double
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMTrackingProjectionEllipse
             Public center As PINVOKE_PSMVector2f
             Public half_x_extent As Single
@@ -70,19 +71,19 @@ Partial Public Class PSMoveServiceExCAPI
             Public angle As Single
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMTrackingProjectionLightbar
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := 3)> Public triangle As PINVOKE_PSMVector2f()
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := 3)> Public quad As PINVOKE_PSMVector2f()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=3)> Public triangle As PINVOKE_PSMVector2f()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=3)> Public quad As PINVOKE_PSMVector2f()
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMTrackingProjectionPointcloud
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := 7)> Public points As PINVOKE_PSMVector2f()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=7)> Public points As PINVOKE_PSMVector2f()
             Public point_count As Integer
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMRawTrackerData
             Public TrackerID As Integer
             Public ScreenLocation As PINVOKE_PSMVector2f
@@ -95,7 +96,7 @@ Partial Public Class PSMoveServiceExCAPI
             Public bMulticamOrientationValid As Byte
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMRawTrackerDataEllipse
             Public TrackerID As Integer
             Public ScreenLocation As PINVOKE_PSMVector2f
@@ -109,7 +110,7 @@ Partial Public Class PSMoveServiceExCAPI
             Public bMulticamOrientationValid As Byte
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMRawTrackerDataLightbar
             Public TrackerID As Integer
             Public ScreenLocation As PINVOKE_PSMVector2f
@@ -123,7 +124,7 @@ Partial Public Class PSMoveServiceExCAPI
             Public bMulticamOrientationValid As Byte
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMRawTrackerDataPointcloud
             Public TrackerID As Integer
             Public ScreenLocation As PINVOKE_PSMVector2f
@@ -138,7 +139,7 @@ Partial Public Class PSMoveServiceExCAPI
         End Structure
 
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMPSMove
             Public bHasValidHardwareCalibration As Byte
             Public bIsTrackingEnabled As Byte
@@ -147,13 +148,18 @@ Partial Public Class PSMoveServiceExCAPI
             Public bIsPositionValid As Byte
             Public bHasUnpublishedState As Byte
 
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := 256)> Public DevicePath As String
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := 128)> Public DeviceSerial As String
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := 128)> Public AssignedHostSerial As String
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=256)>
+            Public DevicePath As String
+
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=128)>
+            Public DeviceSerial As String
+
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=128)>
+            Public AssignedHostSerial As String
 
             Public PairedToHost As Byte
-            Public ConnectionType As Constants.PSMConnectionType
-            Public TrackingColorType As Constants.PSMTrackingColorType
+            Public ConnectionType As PSMConnectionType
+            Public TrackingColorType As PSMTrackingColorType
 
             Public TriangleButton As Integer
             Public CircleButton As Integer
@@ -176,40 +182,40 @@ Partial Public Class PSMoveServiceExCAPI
             Public bPoseResetButtonEnabled As Byte
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMPSNavi
-            Public L1Button As Constants.PSMButtonState
-            Public L2Button As Constants.PSMButtonState
-            Public L3Button As Constants.PSMButtonState
-            Public CircleButton As Constants.PSMButtonState
-            Public CrossButton As Constants.PSMButtonState
-            Public PSButton As Constants.PSMButtonState
-            Public TriggerButton As Constants.PSMButtonState
-            Public DPadUpButton As Constants.PSMButtonState
-            Public DPadRightButton As Constants.PSMButtonState
-            Public DPadDownButton As Constants.PSMButtonState
-            Public DPadLeftButton As Constants.PSMButtonState
+            Public L1Button As PSMButtonState
+            Public L2Button As PSMButtonState
+            Public L3Button As PSMButtonState
+            Public CircleButton As PSMButtonState
+            Public CrossButton As PSMButtonState
+            Public PSButton As PSMButtonState
+            Public TriggerButton As PSMButtonState
+            Public DPadUpButton As PSMButtonState
+            Public DPadRightButton As PSMButtonState
+            Public DPadDownButton As PSMButtonState
+            Public DPadLeftButton As PSMButtonState
 
             Public TriggerValue As Byte
             Public StickXAxis As Byte
             Public StickYAxis As Byte
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMDS4RawSensorData
             Public Accelerometer As PINVOKE_PSMVector3i
             Public Gyroscope As PINVOKE_PSMVector3i
             Public TimeInSeconds As Double
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMDS4CalibratedSensorData
             Public Accelerometer As PINVOKE_PSMVector3f
             Public Gyroscope As PINVOKE_PSMVector3f
             Public TimeInSeconds As Double
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMDualShock4
             Public bHasValidHardwareCalibration As Byte
             Public bIsTrackingEnabled As Byte
@@ -218,36 +224,42 @@ Partial Public Class PSMoveServiceExCAPI
             Public bIsPositionValid As Byte
             Public bHasUnpublishedState As Byte
 
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := 256)> Public DevicePath As String
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := 128)> Public DeviceSerial As String
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := 128)> Public AssignedHostSerial As String
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=256)>
+            Public DevicePath As String
+
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=128)>
+            Public DeviceSerial As String
+
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=128)>
+            Public AssignedHostSerial As String
+
             Public PairedToHost As Byte
-            Public ConnectionType As Constants.PSMConnectionType
-            Public TrackingColorType As Constants.PSMTrackingColorType
+            Public ConnectionType As PSMConnectionType
+            Public TrackingColorType As PSMTrackingColorType
 
 
-            Public DPadUpButton As Constants.PSMButtonState
-            Public DPadDownButton As Constants.PSMButtonState
-            Public DPadLeftButton As Constants.PSMButtonState
-            Public DPadRightButton As Constants.PSMButtonState
+            Public DPadUpButton As PSMButtonState
+            Public DPadDownButton As PSMButtonState
+            Public DPadLeftButton As PSMButtonState
+            Public DPadRightButton As PSMButtonState
 
-            Public SquareButton As Constants.PSMButtonState
-            Public CrossButton As Constants.PSMButtonState
-            Public CircleButton As Constants.PSMButtonState
-            Public TriangleButton As Constants.PSMButtonState
+            Public SquareButton As PSMButtonState
+            Public CrossButton As PSMButtonState
+            Public CircleButton As PSMButtonState
+            Public TriangleButton As PSMButtonState
 
-            Public L1Button As Constants.PSMButtonState
-            Public R1Button As Constants.PSMButtonState
-            Public L2Button As Constants.PSMButtonState
-            Public R2Button As Constants.PSMButtonState
-            Public L3Button As Constants.PSMButtonState
-            Public R3Button As Constants.PSMButtonState
+            Public L1Button As PSMButtonState
+            Public R1Button As PSMButtonState
+            Public L2Button As PSMButtonState
+            Public R2Button As PSMButtonState
+            Public L3Button As PSMButtonState
+            Public R3Button As PSMButtonState
 
-            Public ShareButton As Constants.PSMButtonState
-            Public OptionsButton As Constants.PSMButtonState
+            Public ShareButton As PSMButtonState
+            Public OptionsButton As PSMButtonState
 
-            Public PSButton As Constants.PSMButtonState
-            Public TrackPadButton As Constants.PSMButtonState
+            Public PSButton As PSMButtonState
+            Public TrackPadButton As PSMButtonState
 
 
             Public LeftAnalogX As Single
@@ -268,13 +280,13 @@ Partial Public Class PSMoveServiceExCAPI
             Public bPoseResetButtonEnabled As Byte
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMVirtualController
             Public bIsTrackingEnabled As Byte
             Public bIsCurrentlyTracking As Byte
             Public bIsPositionValid As Byte
 
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := 256)> Public DevicePath As String
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=256)> Public DevicePath As String
 
             Public vendorID As Integer
             Public productID As Integer
@@ -282,20 +294,20 @@ Partial Public Class PSMoveServiceExCAPI
             Public numAxes As Integer
             Public numButtons As Integer
 
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSM_MAX_VIRTUAL_CONTROLLER_AXES)> Public _
-                axisStates As Byte()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSM_MAX_VIRTUAL_CONTROLLER_AXES)>
+            Public axisStates As Byte()
 
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSM_MAX_VIRTUAL_CONTROLLER_BUTTONS)> Public _
-                buttonStates As Integer()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSM_MAX_VIRTUAL_CONTROLLER_BUTTONS)>
+            Public buttonStates As Integer()
 
-            Public TrackingColorType As Constants.PSMTrackingColorType
+            Public TrackingColorType As PSMTrackingColorType
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMController
             Public ControllerID As Integer
-            Public ControllerType As Constants.PSMControllerType
-            Public ControllerHand As Constants.PSMControllerHand
+            Public ControllerType As PSMControllerType
+            Public ControllerHand As PSMControllerHand
 
             Public bValid As Byte
             Public OutputSequenceNum As Integer
@@ -306,14 +318,18 @@ Partial Public Class PSMoveServiceExCAPI
             Public ListenerCount As Integer
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMClientTrackerInfo
             Public tracker_id As Integer
 
-            Public tracker_type As Constants.PSMTrackerType
-            Public tracker_Driver As Constants.PSMTrackerDriver
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := 128)> Public device_path As String
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := 64)> Public shared_memory_name As String
+            Public tracker_type As PSMTrackerType
+            Public tracker_Driver As PSMTrackerDriver
+
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=128)>
+            Public device_path As String
+
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=64)>
+            Public shared_memory_name As String
 
             Public tracker_focal_lengths As PINVOKE_PSMVector2f
             Public tracker_principal_point As PINVOKE_PSMVector2f
@@ -331,7 +347,7 @@ Partial Public Class PSMoveServiceExCAPI
             Public tracker_pose As PINVOKE_PSMPosef
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMTracker
             Public tracker_info As PINVOKE_PSMClientTrackerInfo
 
@@ -344,21 +360,21 @@ Partial Public Class PSMoveServiceExCAPI
             Public opaque_shared_memory_accesor As IntPtr
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMMorpheusRawSensorData
             Public Accelerometer As PINVOKE_PSMVector3i
             Public Gyroscope As PINVOKE_PSMVector3i
             Public TimeInSeconds As Double
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMMorpheusCalibratedSensorData
             Public Accelerometer As PINVOKE_PSMVector3f
             Public Gyroscope As PINVOKE_PSMVector3f
             Public TimeInSeconds As Double
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMMorpheus
             Public bIsTrackingEnabled As Byte
             Public bIsCurrentlyTracking As Byte
@@ -366,17 +382,17 @@ Partial Public Class PSMoveServiceExCAPI
             Public bIsPositionValid As Byte
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMVirtualHMD
             Public bIsTrackingEnabled As Byte
             Public bIsCurrentlyTracking As Byte
             Public bIsPositionValid As Byte
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMHeadMountedDisplay
             Public HmdID As Integer
-            Public HmdType As Constants.PSMHmdType
+            Public HmdType As PSMHmdType
 
             Public bValid As Byte
             Public OutputSequenceNum As Integer
@@ -386,117 +402,113 @@ Partial Public Class PSMoveServiceExCAPI
             Public ListenerCount As Integer
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMServiceVersion
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := Constants.PSMOVESERVICE_MAX_VERSION_STRING_LEN)> Public _
-                version_string As String
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=PSMOVESERVICE_MAX_VERSION_STRING_LEN)>
+            Public version_string As String
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMController_Serial
-            <MarshalAs(UnmanagedType.ByValTStr, SizeConst := Constants.PSMOVESERVICE_CONTROLLER_SERIAL_LEN)> Public _
-                [get] As String
+            <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=PSMOVESERVICE_CONTROLLER_SERIAL_LEN)>
+            Public [get] As String
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMControllerList
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSMOVESERVICE_MAX_CONTROLLER_COUNT)> Public _
-                controller_id As Integer()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_CONTROLLER_COUNT)>
+            Public controller_id As Integer()
 
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSMOVESERVICE_MAX_CONTROLLER_COUNT)> Public _
-                controller_type As Constants.PSMControllerType()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_CONTROLLER_COUNT)>
+            Public controller_type As PSMControllerType()
 
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSMOVESERVICE_MAX_CONTROLLER_COUNT)> Public _
-                controller_hand As Constants.PSMControllerHand()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_CONTROLLER_COUNT)>
+            Public controller_hand As PSMControllerHand()
 
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSMOVESERVICE_MAX_CONTROLLER_COUNT)> Public _
-                controller_serial As PINVOKE_PSMController_Serial()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_CONTROLLER_COUNT)>
+            Public controller_serial As PINVOKE_PSMController_Serial()
 
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSMOVESERVICE_MAX_CONTROLLER_COUNT)> Public _
-                parent_controller_serial As PINVOKE_PSMController_Serial()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_CONTROLLER_COUNT)>
+            Public parent_controller_serial As PINVOKE_PSMController_Serial()
 
             Public count As Integer
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMTrackerList
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSMOVESERVICE_MAX_TRACKER_COUNT)> Public _
-                trackers As PINVOKE_PSMClientTrackerInfo()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_TRACKER_COUNT)>
+            Public trackers As PINVOKE_PSMClientTrackerInfo()
 
             Public count As Integer
             Public global_forward_degrees As Single
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMHmdList
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSMOVESERVICE_MAX_HMD_COUNT)> Public _
-                hmd_id As PINVOKE_PSMClientTrackerInfo()
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_HMD_COUNT)>
+            Public hmd_id As PINVOKE_PSMClientTrackerInfo()
 
-            <MarshalAs(UnmanagedType.ByValArray, SizeConst := Constants.PSMOVESERVICE_MAX_HMD_COUNT)> Public _
-                hmd_type As Constants.PSMHmdType
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_HMD_COUNT)>
+            Public hmd_type As PSMHmdType
 
             Public count As Integer
         End Structure
 
-        <StructLayout(LayoutKind.Sequential, CharSet := CharSet.Ansi)>
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMTrackingSpace
             Public global_forward_degrees As Single
         End Structure
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_Initialize(<MarshalAs(UnmanagedType.LPStr)> host As String,
-                                              <MarshalAs(UnmanagedType.LPStr)> port As String, timeout_ms As Integer) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_Initialize(<MarshalAs(UnmanagedType.LPStr)> host As String, <MarshalAs(UnmanagedType.LPStr)> port As String, timeout_ms As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_Shutdown() As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_Update() As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_UpdateNoPollMessages() As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_GetClientVersionString() As IntPtr
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_GetIsInitialized() As Byte
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_GetIsConnected() As Byte
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_HasConnectionStatusChanged() As Byte
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_HasControllerListChanged() As Byte
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_HasTrackerListChanged() As Byte
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_HasHMDListChanged() As Byte
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_WasSystemButtonPressed() As Byte
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetServiceVersionString(out_version_string As StringBuilder,
-                                                           max_version_string As Integer, timeout_ms As Integer) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetServiceVersionString(out_version_string As StringBuilder, max_version_string As Integer, timeout_ms As Integer) As Integer
         End Function
 
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetServiceVersionStringAsync(PSMRequestID *out_request_id);
@@ -507,161 +519,138 @@ Partial Public Class PSMoveServiceExCAPI
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_EatResponse(PSMRequestID request_id);
         'PSM_PUBLIC_FUNCTION(PSMController *) PSM_GetController(PSMControllerID controller_id);
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_GetControllerEx(controller_id As Integer, controller_out As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerPSMoveState(controller_id As Integer, controller_out As IntPtr) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerPSMoveState(controller_id As Integer, controller_out As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerPSMoveStateEx(controller_id As Integer, controller_out As IntPtr) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerPSMoveStateEx(controller_id As Integer, controller_out As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerPSNaviState(controller_id As Integer, controller_out As IntPtr) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerPSNaviState(controller_id As Integer, controller_out As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerDualShock4StateEx(controller_id As Integer, controller_out As IntPtr) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerDualShock4StateEx(controller_id As Integer, controller_out As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerVirtualControllerStateEx(controller_id As Integer,
-                                                                         controller_out As IntPtr) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerVirtualControllerStateEx(controller_id As Integer, controller_out As IntPtr) As Integer
         End Function
 
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerDualShock4State(PSMControllerID controller_id, PSMDualShock4 *controller_out); 
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerVirtualControllerState(PSMControllerID controller_id, PSMVirtualController *controller_out);
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_AllocateControllerListener(controller_id As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_FreeControllerListener(controller_id As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_GetControllerList(out_controller_list As IntPtr, timeout_ms As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_StartControllerDataStream(controller_id As Integer, data_stream_flags As UInteger,
-                                                             timeout_ms As Integer) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_StartControllerDataStream(controller_id As Integer, data_stream_flags As UInteger, timeout_ms As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_StopControllerDataStream(controller_id As Integer, timeout_ms As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_SetControllerLEDTrackingColor(controller_id As Integer, tracking_color As Integer,
-                                                                 timeout_ms As Integer) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_SetControllerLEDTrackingColor(controller_id As Integer, tracking_color As Integer, timeout_ms As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_ResetControllerOrientation(controller_id As Integer, q_pose As IntPtr,
-                                                              timeout_ms As Integer) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_ResetControllerOrientation(controller_id As Integer, q_pose As IntPtr, timeout_ms As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_SetControllerDataStreamTrackerIndex(controller_id As Integer, tracker_id As Integer,
-                                                                       timeout_ms As Integer) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_SetControllerDataStreamTrackerIndex(controller_id As Integer, tracker_id As Integer, timeout_ms As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_SetControllerHand(controller_id As Integer, hand As Integer, timeout_ms As Integer) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_SetControllerHand(controller_id As Integer, hand As Integer, timeout_ms As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerOrientation(controller_id As Integer, out_orientation As IntPtr) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerOrientation(controller_id As Integer, out_orientation As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_GetControllerPosition(controller_id As Integer, out_position As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_GetControllerPose(controller_id As Integer, out_pose As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_GetControllerPhysicsData(controller_id As Integer, out_physics As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerPSMoveRawSensorData(controller_id As Integer, out_data As IntPtr) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerPSMoveRawSensorData(controller_id As Integer, out_data As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerDualShock4RawSensorData(controller_id As Integer, out_data As IntPtr) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerDualShock4RawSensorData(controller_id As Integer, out_data As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerPSMoveSensorData(controller_id As Integer, out_data As IntPtr) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerPSMoveSensorData(controller_id As Integer, out_data As IntPtr) As Integer
         End Function
 
 
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerDualShock4SensorData(PSMControllerID controller_id, PSMDS4CalibratedSensorData *out_data);
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerRumble(controller_id As Integer, channel As Integer,
-                                                       <Out> ByRef out_rumble_fraction As Single) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerRumble(controller_id As Integer, channel As Integer, <Out> ByRef out_rumble_fraction As Single) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetIsControllerStable(controller_id As Integer, <Out> ByRef out_is_stable As Byte) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetIsControllerStable(controller_id As Integer, <Out> ByRef out_is_stable As Byte) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetIsControllerTracking(controller_id As Integer, <Out> ByRef out_is_tracking As Byte) _
-            As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetIsControllerTracking(controller_id As Integer, <Out> ByRef out_is_tracking As Byte) As Integer
         End Function
 
         '<DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         'Public Shared Function PSM_GetControllerRawTrackerData(controller_id As Integer, out_tracker_data As IntPtr) As Integer
         'End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerRawTrackerShape(controller_id As Integer,
-                                                                <Out> ByRef out_shape_type As Integer) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerRawTrackerShape(controller_id As Integer, <Out> ByRef out_shape_type As Integer) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerRawTrackerDataEllipse(controller_id As Integer,
-                                                                      out_tracker_data As IntPtr) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerRawTrackerDataEllipse(controller_id As Integer, out_tracker_data As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerRawTrackerDataLightbar(controller_id As Integer,
-                                                                       out_tracker_data As IntPtr) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerRawTrackerDataLightbar(controller_id As Integer, out_tracker_data As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_GetControllerRawTrackerDataPointcloud(controller_id As Integer,
-                                                                         out_tracker_data As IntPtr) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetControllerRawTrackerDataPointcloud(controller_id As Integer, out_tracker_data As IntPtr) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_SetControllerLEDOverrideColor(controller_id As Integer, r As Byte, g As Byte,
-                                                                 b As Byte) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_SetControllerLEDOverrideColor(controller_id As Integer, r As Byte, g As Byte, b As Byte) As Integer
         End Function
 
-        <DllImport("PSMoveClient_CAPI.dll", CharSet := CharSet.Ansi)>
-        Public Shared Function PSM_SetControllerRumble(controller_id As Integer, channel As Integer,
-                                                       rumble_fraction As Single) As Integer
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_SetControllerRumble(controller_id As Integer, channel As Integer, rumble_fraction As Single) As Integer
         End Function
 
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetControllerPixelLocationOnTracker(PSMControllerID controller_id, PSMTrackerID *out_tracker_id, PSMVector2f *out_location);

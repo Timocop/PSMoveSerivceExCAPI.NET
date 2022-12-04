@@ -51,7 +51,7 @@
     <FileVersion>0.0.1.0</FileVersion>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
-    <PackageId>PSMoveServiceEx.API</PackageId>
+    <PackageId>PSMoveServiceExCAPI</PackageId>
     <Version>0.1.0</Version>
     <Authors>Externet</Authors>
     <PackageTags>PSMS;PSMSEX;PSMove;PSMoveService;PSMoveServiceEx</PackageTags>
@@ -60,7 +60,7 @@
     </Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <RepositoryUrl>https://github.com/Timocop/PSMoveServiceEx-CAPI.NET</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Timocop/PSMoveServiceEx-CAPI.NET</PackageProjectUrl>
