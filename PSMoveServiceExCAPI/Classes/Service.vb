@@ -133,6 +133,10 @@ Partial Public Class PSMoveServiceExCAPI
             Return CBool(PInvoke.PSM_WasSystemButtonPressed())
         End Function
 
+        Public Function HasPlayspaceOffsetChanged() As Boolean
+            Return CBool(PInvoke.PSM_HasPlayspaceOffsetChanged())
+        End Function
+
 #Region "IDisposable Support"
 
         Private disposedValue As Boolean ' To detect redundant calls

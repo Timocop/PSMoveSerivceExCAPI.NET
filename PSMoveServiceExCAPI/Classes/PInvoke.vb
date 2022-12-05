@@ -446,7 +446,7 @@ Partial Public Class PSMoveServiceExCAPI
         <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMHmdList
             <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_HMD_COUNT)>
-            Public hmd_id As PINVOKE_PSMClientTrackerInfo()
+            Public hmd_id As PINVOKE_PSMHeadMountedDisplay()
 
             <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_HMD_COUNT)>
             Public hmd_type As PSMHmdType
@@ -505,6 +505,10 @@ Partial Public Class PSMoveServiceExCAPI
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
         Public Shared Function PSM_WasSystemButtonPressed() As Byte
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_HasPlayspaceOffsetChanged() As Byte
         End Function
 
         <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
@@ -664,19 +668,51 @@ Partial Public Class PSMoveServiceExCAPI
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_ResetControllerOrientationAsync(PSMControllerID controller_id, const PSMQuatf *q_pose, PSMRequestID *out_request_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_SetControllerDataStreamTrackerIndexAsync(PSMControllerID controller_id, PSMTrackerID tracker_id, PSMRequestID *out_request_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_SetControllerHandAsync(PSMControllerID controller_id, PSMControllerHand hand, PSMRequestID *out_request_id);
-        'PSM_PUBLIC_FUNCTION(PSMTracker *) PSM_GetTracker(PSMTrackerID tracker_id);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_AllocateTrackerListener(PSMTrackerID tracker_id, const PSMClientTrackerInfo *tracker_info);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_FreeTrackerListener(PSMTrackerID controller_id);
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetTracker(tracker_id As Integer) As IntPtr
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetTrackerEx(tracker_id As Integer, tracker_out As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_AllocateTrackerListener(tracker_id As Integer, tracker_info As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_FreeTrackerListener(tracker_id As Integer) As Integer
+        End Function
+
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetTrackerIntrinsicMatrix(PSMTrackerID tracker_id, PSMMatrix3f *out_matrix);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetTrackerList(PSMTrackerList *out_tracker_list, int timeout_ms);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StartTrackerDataStream(PSMTrackerID tracker_id, int timeout_ms);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StopTrackerDataStream(PSMTrackerID tracker_id, int timeout_ms);
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetTrackerList(out_tracker_list As IntPtr, timeout_ms As Integer) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_StartTrackerDataStream(tracker_id As Integer, timeout_ms As Integer) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_StopTrackerDataStream(tracker_id As Integer, timeout_ms As Integer) As Integer
+        End Function
+
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetTrackingSpaceSettings(PSMTrackingSpace *out_tracking_space, int timeout_ms);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_OpenTrackerVideoStream(PSMTrackerID tracker_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_PollTrackerVideoStream(PSMTrackerID tracker_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_CloseTrackerVideoStream(PSMTrackerID tracker_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetTrackerVideoFrameBuffer(PSMTrackerID tracker_id, const unsigned char **out_buffer); 
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetTrackerFrustum(PSMTrackerID tracker_id, PSMFrustum *out_frustum);
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetTrackerPose(tracker_id As Integer, <Out> out_pose As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetTrackerFrustum(tracker_id As Integer, <Out> out_frustum As IntPtr) As Integer
+        End Function
+
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetTrackerListAsync(PSMRequestID *out_request_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StartTrackerDataStreamAsync(PSMTrackerID tracker_id, PSMRequestID *out_request_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StopTrackerDataStreamAsync(PSMTrackerID tracker_id, PSMRequestID *out_request_id);

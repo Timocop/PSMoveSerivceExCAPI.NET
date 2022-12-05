@@ -26,7 +26,7 @@ Partial Public Class PSMoveServiceExCAPI
             If (_NoInitalization) Then
                 g_mInfo.Refresh(Info.RefreshFlags.RefreshType_All)
             Else
-                g_mInfo.Refresh(Info.RefreshFlags.RefreshType_All Or Info.RefreshFlags.RefreshType_ProbeSerial)
+                g_mInfo.Refresh(Info.RefreshFlags.RefreshType_All Or Info.RefreshFlags.RefreshType_Init)
             End If
 
             If (_StartDataStream) Then
@@ -81,7 +81,7 @@ Partial Public Class PSMoveServiceExCAPI
             Private g_bIsInitalized As Boolean = False
 
             Enum RefreshFlags
-                RefreshType_ProbeSerial = (1 << 0)
+                RefreshType_Init = (1 << 0)
                 RefreshType_Basic = (1 << 1)
                 RefreshType_State = (1 << 2)
                 RefreshType_Pose = (1 << 3)
@@ -775,7 +775,7 @@ Partial Public Class PSMoveServiceExCAPI
             End Function
 
             Public Sub Refresh(iRefreshType As RefreshFlags)
-                If ((iRefreshType And RefreshFlags.RefreshType_ProbeSerial) > 0) Then
+                If ((iRefreshType And RefreshFlags.RefreshType_Init) > 0) Then
                     Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMControllerList)))
                     Try
                         If (CType(PInvoke.PSM_GetControllerList(hPtr, PSM_DEFAULT_TIMEOUT), PSMResult) = PSMResult.PSMResult_Success) Then
@@ -1054,12 +1054,12 @@ Partial Public Class PSMoveServiceExCAPI
 
                 If (g_bDataStream) Then
                     If (PInvoke.PSM_StartControllerDataStream(g_mInfo.m_ControllerId, CUInt(m_DataStreamFlags), PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_AllocateControllerListener failed")
+                        Throw New ArgumentException("PSM_StartControllerDataStream failed")
                     End If
                 Else
                     If (PInvoke.PSM_StopControllerDataStream(g_mInfo.m_ControllerId, PSM_DEFAULT_TIMEOUT) <>
                             PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_FreeControllerListener failed")
+                        Throw New ArgumentException("PSM_StopControllerDataStream failed")
                     End If
                 End If
             End Set
