@@ -13,20 +13,36 @@ Partial Public Class PSMoveServiceExCAPI
         Private g_iDataStreamFlags As PSMStreamFlags = PSMStreamFlags.PSMStreamFlags_defaultStreamOptions
 
         Public Sub New(_ControllerId As Integer)
-            Me.New(_ControllerId, False)
+            Me.New(_ControllerId, False, True)
         End Sub
 
-        Public Sub New(_ControllerId As Integer, _StartDataStream As Boolean)
+        Public Sub New(_ControllerId As Integer, _StartDataStream As Boolean, _NoInitalization As Boolean)
             If (_ControllerId < 0 OrElse _ControllerId > PSMOVESERVICE_MAX_CONTROLLER_COUNT - 1) Then
                 Throw New ArgumentOutOfRangeException()
             End If
 
             g_mInfo = New Info(Me, _ControllerId)
 
-            g_mInfo.Refresh(Info.RefreshFlags.RefreshType_All)
+            If (_NoInitalization) Then
+                g_mInfo.Refresh(Info.RefreshFlags.RefreshType_All)
+            Else
+                g_mInfo.Refresh(Info.RefreshFlags.RefreshType_All Or Info.RefreshFlags.RefreshType_ProbeSerial)
+            End If
 
-            m_Listening = True
-            m_DataStreamEnabled = True
+            If (_StartDataStream) Then
+                m_Listening = True
+                m_DataStreamEnabled = True
+            End If
+        End Sub
+
+        Protected Sub New(_ControllerId As Integer, _Serial As String, _ParentSerial As String, _ControllerType As PSMControllerType, _ControllerHand As PSMControllerHand)
+            Me.New(_ControllerId, False, True)
+            m_Info.SetControllerSerial(_Serial)
+            m_Info.SetControllerParentSerial(_ParentSerial)
+            m_Info.SetControllerType(_ControllerType)
+            m_Info.SetControllerHand(_ControllerHand)
+
+            m_Info.SetControllerInitalized()
         End Sub
 
         Public Sub Refresh(iRefreshType As Info.RefreshFlags)
@@ -61,6 +77,8 @@ Partial Public Class PSMoveServiceExCAPI
             Private g_iDataFrameLastReceivedTime As ULong
             Private g_iDataFrameAverageFPS As Single
             Private g_iListenerCount As Integer
+
+            Private g_bIsInitalized As Boolean = False
 
             Enum RefreshFlags
                 RefreshType_ProbeSerial = (1 << 0)
@@ -103,11 +121,36 @@ Partial Public Class PSMoveServiceExCAPI
 
                     g_iControllerHand = Value
 
-                    If (PInvoke.PSM_SetControllerHand(m_ControllerId, g_iControllerHand, PSM_DEFAULT_TIMEOUT) <>
-                         PSMResult.PSMResult_Success) Then
+                    If (PInvoke.PSM_SetControllerHand(m_ControllerId, g_iControllerHand, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
                         Throw New ArgumentException("PSM_SetControllerHand failed")
                     End If
                 End Set
+            End Property
+
+            Protected Friend Sub SetControllerSerial(sSerial As String)
+                g_sControllerSerial = sSerial
+            End Sub
+
+            Protected Friend Sub SetControllerParentSerial(sSerial As String)
+                g_sParentControllerSerial = sSerial
+            End Sub
+
+            Protected Friend Sub SetControllerType(iControllerType As PSMControllerType)
+                g_iControllerType = iControllerType
+            End Sub
+
+            Protected Friend Sub SetControllerHand(iControllerHand As PSMControllerHand)
+                g_iControllerHand = iControllerHand
+            End Sub
+
+            Protected Friend Sub SetControllerInitalized()
+                g_bIsInitalized = True
+            End Sub
+
+            ReadOnly Property m_IsInitalized As Boolean
+                Get
+                    Return g_bIsInitalized
+                End Get
             End Property
 
             ReadOnly Property m_ControllerSerial As String
@@ -745,6 +788,10 @@ Partial Public Class PSMoveServiceExCAPI
 
                                 g_sControllerSerial = mControllerList.controller_serial(i).get
                                 g_sParentControllerSerial = mControllerList.parent_controller_serial(i).get
+                                g_iControllerType = mControllerList.controller_type(i)
+                                g_iControllerHand = mControllerList.controller_hand(i)
+
+                                SetControllerInitalized()
                                 Exit For
                             Next
                         End If
@@ -906,8 +953,7 @@ Partial Public Class PSMoveServiceExCAPI
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Tracker) > 0) Then
                     Dim iShape As Integer = PSMShape.PSMShape_INVALID_PROJECTION
-                    If (PInvoke.PSM_GetControllerRawTrackerShape(m_ControllerId, iShape) =
-                         PSMResult.PSMResult_Success) Then
+                    If (PInvoke.PSM_GetControllerRawTrackerShape(m_ControllerId, iShape) = PSMResult.PSMResult_Success) Then
                         Select Case (iShape)
                             Case PSMShape.PSMShape_Ellipse
                                 Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMRawTrackerDataEllipse)))
@@ -1134,7 +1180,15 @@ Partial Public Class PSMoveServiceExCAPI
                     Dim mControllerList = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMControllerList)(hPtr)
 
                     For i = 0 To mControllerList.count - 1
-                        mControllers.Add(New Controllers(mControllerList.controller_id(i)))
+                        Dim mController As New Controllers(
+                            mControllerList.controller_id(i),
+                            mControllerList.controller_serial(i).get,
+                            mControllerList.parent_controller_serial(i).get,
+                            mControllerList.controller_type(i),
+                            mControllerList.controller_hand(i)
+                        )
+
+                        mControllers.Add(mController)
                     Next
                 End If
             Finally

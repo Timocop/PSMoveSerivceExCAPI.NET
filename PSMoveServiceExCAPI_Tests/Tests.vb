@@ -42,12 +42,6 @@ Module Tests
                 ' Get new list of controllers
                 mControllers = Controllers.GetControllerList()
 
-                ' Controller list changed, try getting the serial from the controllers.
-                ' This is Networked and should only be used once.
-                For i = 0 To mControllers.Length - 1
-                    mControllers(i).Refresh(RefreshFlags.RefreshType_ProbeSerial)
-                Next
-
                 If (iListenController < 0 OrElse iListenController > mControllers.Length - 1) Then
                     Throw New ArgumentException("Controller id out of range")
                 End If
@@ -86,8 +80,10 @@ Module Tests
                         Console.WriteLine(" --------------------------------- ")
                         Console.WriteLine("Controller ID: " & mController.m_Info.m_ControllerId)
                         Console.WriteLine("m_ControllerType: " & mController.m_Info.m_ControllerType.ToString)
+                        Console.WriteLine("m_ControllerHand: " & mController.m_Info.m_ControllerHand.ToString)
 
                         Console.WriteLine("m_ControllerSerial: " & mController.m_Info.m_ControllerSerial)
+                        Console.WriteLine("m_ParentControllerSerial: " & mController.m_Info.m_ParentControllerSerial)
                         Console.WriteLine("IsControllerStable: " & mController.IsControllerStable())
 
                         If (mController.m_Info.IsStateValid()) Then
