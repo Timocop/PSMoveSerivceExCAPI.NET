@@ -871,17 +871,50 @@ Partial Public Class PSMoveServiceExCAPI
                 End If
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Pose) > 0) Then
-                    Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMPosef)))
-                    Try
-                        If (PInvoke.PSM_GetControllerPose(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
-                            Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMPosef)(hPtr)
+                    Dim mPose As New PInvoke.PINVOKE_PSMPosef
+                    mPose.Position.x = 0.0F
+                    mPose.Position.y = 0.0F
+                    mPose.Position.z = 0.0F
+                    mPose.Orientation.x = 0.0F
+                    mPose.Orientation.y = 0.0F
+                    mPose.Orientation.z = 0.0F
+                    mPose.Orientation.w = 1.0F
+
+                    Dim bPositionValid As Boolean = False
+                    Dim bOrientationValid As Boolean = False
+
+                    If (True) Then
+                        Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMVector3f)))
+                        Try
+                            If (PInvoke.PSM_GetControllerPosition(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
+                                Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMVector3f)(hPtr)
+
+                                mPose.Position = mData
+                                bPositionValid = True
+                            End If
+                        Finally
+                            Marshal.FreeHGlobal(hPtr)
+                        End Try
+                    End If
 
 
-                            g_Pose = New PSPose(mData)
-                        End If
-                    Finally
-                        Marshal.FreeHGlobal(hPtr)
-                    End Try
+                    If (True) Then
+                        Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMQuatf)))
+                        Try
+                            If (PInvoke.PSM_GetControllerOrientation(m_ControllerId, hPtr) = PSMResult.PSMResult_Success) Then
+                                Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMQuatf)(hPtr)
+
+                                mPose.Orientation = mData
+                                bOrientationValid = True
+                            End If
+                        Finally
+                            Marshal.FreeHGlobal(hPtr)
+                        End Try
+                    End If
+
+                    If (bPositionValid OrElse bOrientationValid) Then
+                        g_Pose = New PSPose(mPose)
+                    End If
                 End If
 
                 If ((iRefreshType And RefreshFlags.RefreshType_Physics) > 0) Then

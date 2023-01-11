@@ -139,6 +139,8 @@ Module Tests
                             Console.WriteLine("m_TriggerValue: " & mPSMoveState.m_TriggerValue)
 
                             Console.WriteLine("m_bIsCurrentlyTracking: " & mPSMoveState.m_bIsCurrentlyTracking)
+                            Console.WriteLine("m_IsPositionValid: " & mPSMoveState.m_IsPositionValid)
+                            Console.WriteLine("m_IsOrientationValid: " & mPSMoveState.m_IsOrientationValid)
                         End If
                     End If
 
@@ -146,6 +148,11 @@ Module Tests
                         Console.WriteLine("m_Position.x: " & mController.m_Info.m_Pose.m_Position.x)
                         Console.WriteLine("m_Position.y: " & mController.m_Info.m_Pose.m_Position.y)
                         Console.WriteLine("m_Position.z: " & mController.m_Info.m_Pose.m_Position.z)
+
+                        Console.WriteLine("m_Orientation.x: " & mController.m_Info.m_Pose.m_Orientation.x)
+                        Console.WriteLine("m_Orientation.y: " & mController.m_Info.m_Pose.m_Orientation.y)
+                        Console.WriteLine("m_Orientation.z: " & mController.m_Info.m_Pose.m_Orientation.z)
+                        Console.WriteLine("m_Orientation.z: " & mController.m_Info.m_Pose.m_Orientation.w)
                     End If
 
                     If (mController.m_Info.IsSensorValid()) Then
