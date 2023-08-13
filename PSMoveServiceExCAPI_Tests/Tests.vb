@@ -125,6 +125,8 @@ Module Tests
                         If (mController.m_Info.m_ControllerType = PSMControllerType.PSMController_Move) Then
                             Dim mPSMoveState = mController.m_Info.GetPSState(Of Controllers.Info.PSMoveState)
 
+                            Console.WriteLine("m_TrackingColorType: " & mPSMoveState.m_TrackingColorType.ToString)
+
                             Console.WriteLine("m_TriangleButton: " & mPSMoveState.m_TriangleButton.ToString)
                             Console.WriteLine("m_CircleButton: " & mPSMoveState.m_CircleButton.ToString)
                             Console.WriteLine("m_CrossButton: " & mPSMoveState.m_CrossButton.ToString)
