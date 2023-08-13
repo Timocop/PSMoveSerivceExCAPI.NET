@@ -139,6 +139,7 @@
   <ItemGroup>
     <Content Include="..\PSMoveServiceExCAPI\lib\PSMoveClient_CAPI.dll">
       <Link>PSMoveClient_CAPI.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
