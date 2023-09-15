@@ -3,6 +3,7 @@ Imports PSMoveServiceExCAPI.PSMoveServiceExCAPI.Constants
 
 Module Tests
     Dim mControllers As Controllers() = Nothing
+    Dim mHmds As HeadMountedDevices() = Nothing
     Dim mTrackers As Trackers() = Nothing
 
     Dim sHost As String = "127.0.0.1"
@@ -12,7 +13,7 @@ Module Tests
             While True
                 Dim sLine As String
 
-                Console.WriteLine("Listen to [T]racker or [C]ontroller:")
+                Console.WriteLine("Listen to [T]racker, [C]ontroller or [H]head-mounted Device:")
                 sLine = Console.ReadLine()
 
                 Select Case (sLine.ToLowerInvariant)
@@ -58,6 +59,28 @@ Module Tests
                         End If
 
                         DoControllers(iNum)
+
+                    Case "h"
+                        Console.WriteLine("HMDs to listen [0-9]:")
+                        sLine = Console.ReadLine()
+
+                        If (String.IsNullOrEmpty(sLine)) Then
+                            Return
+                        End If
+
+                        Dim iNum As Integer
+                        If (Not Integer.TryParse(sLine, iNum)) Then
+                            Return
+                        End If
+
+                        Console.WriteLine("Enter remote IP (leave blank for localhost): ")
+                        sLine = Console.ReadLine()
+
+                        If (Not String.IsNullOrEmpty(sLine)) Then
+                            sHost = sLine
+                        End If
+
+                        DoHeadMountedDevices(iNum)
                 End Select
 
                 Console.ReadLine()
@@ -73,8 +96,8 @@ Module Tests
         Using mService As New Service(sHost)
             mService.Connect()
 
-            ' Get new list of controllers
-            mControllers = Controllers.GetControllerList()
+            ' Get new list of controllers.
+            mControllers = Controllers.GetControllerList
 
             If (iListenController < 0 OrElse iListenController > mControllers.Length - 1) Then
                 Throw New ArgumentException("Controller id out of range")
@@ -91,18 +114,18 @@ Module Tests
                         PSMStreamFlags.PSMStreamFlags_includeRawSensorData Or
                         PSMStreamFlags.PSMStreamFlags_includeRawTrackerData
 
-                ' Enable and start listening to the stream
+                ' Enable and start listening to the stream.
                 mController.m_Listening = True
                 mController.m_DataStreamEnabled = True
 
-                ' Start tracker data stream for this controller
-                ' This is never needed unless you want to get the projection from the camera
-                ' Only one tracker stream per controller is supported
+                ' Start tracker data stream for this controller.
+                ' This is never needed unless you want to get the projection from the camera.
+                ' Only one tracker stream per controller is supported.
                 mController.SetTrackerStream(0)
 
                 While True
-                    ' Poll changes and refresh controller data
-                    ' Use 'RefreshFlags' to optimize what you need to reduce API calls
+                    ' Poll changes and refresh controller data.
+                    ' Use 'RefreshFlags' to optimize what you need to reduce API calls.
                     mService.Update()
 
                     If (mService.HasControllerListChanged) Then
@@ -112,7 +135,7 @@ Module Tests
                     mController.Refresh(Controllers.Info.RefreshFlags.RefreshType_All)
 
                     Console.WriteLine(" --------------------------------- ")
-                    Console.WriteLine("Controller ID: " & mController.m_Info.m_ControllerId)
+                    Console.WriteLine("m_ControllerId: " & mController.m_Info.m_ControllerId)
                     Console.WriteLine("m_ControllerType: " & mController.m_Info.m_ControllerType.ToString)
                     Console.WriteLine("m_ControllerHand: " & mController.m_Info.m_ControllerHand.ToString)
 
@@ -154,7 +177,7 @@ Module Tests
                         Console.WriteLine("m_Orientation.x: " & mController.m_Info.m_Pose.m_Orientation.x)
                         Console.WriteLine("m_Orientation.y: " & mController.m_Info.m_Pose.m_Orientation.y)
                         Console.WriteLine("m_Orientation.z: " & mController.m_Info.m_Pose.m_Orientation.z)
-                        Console.WriteLine("m_Orientation.z: " & mController.m_Info.m_Pose.m_Orientation.w)
+                        Console.WriteLine("m_Orientation.w: " & mController.m_Info.m_Pose.m_Orientation.w)
                     End If
 
                     If (mController.m_Info.IsSensorValid()) Then
@@ -189,6 +212,116 @@ Module Tests
         End Using
     End Sub
 
+    Private Sub DoHeadMountedDevices(iListenHMD As Integer)
+        Using mService As New Service(sHost)
+            mService.Connect()
+
+            ' Get new list of hmds
+            mHmds = HeadMountedDevices.GetHmdList()
+
+            If (iListenHMD < 0 OrElse iListenHMD > mHmds.Length - 1) Then
+                Throw New ArgumentException("HMD id out of range")
+            End If
+
+            If (mHmds IsNot Nothing) Then
+                Dim mHmd As HeadMountedDevices = mHmds(iListenHMD)
+
+                ' Setup streaming flags we need.
+                mHmd.m_DataStreamFlags =
+                        PSMStreamFlags.PSMStreamFlags_includeCalibratedSensorData Or
+                        PSMStreamFlags.PSMStreamFlags_includePhysicsData Or
+                        PSMStreamFlags.PSMStreamFlags_includePositionData Or
+                        PSMStreamFlags.PSMStreamFlags_includeRawSensorData Or
+                        PSMStreamFlags.PSMStreamFlags_includeRawTrackerData
+
+                ' Enable and start listening to the stream.
+                mHmd.m_Listening = True
+                mHmd.m_DataStreamEnabled = True
+
+                ' Start tracker data stream for this hmd.
+                ' This is never needed unless you want to get the projection from the camera.
+                ' Only one tracker stream per hmd is supported.
+                mHmd.SetTrackerStream(0)
+
+                While True
+                    ' Poll changes and refresh hmd data.
+                    ' Use 'RefreshFlags' to optimize what you need to reduce API calls.
+                    mService.Update()
+
+                    If (mService.HasHMDListChanged) Then
+                        Throw New ArgumentException("Hmd list has changed")
+                    End If
+
+                    mHmd.Refresh(HeadMountedDevices.Info.RefreshFlags.RefreshType_All)
+
+                    Console.WriteLine(" --------------------------------- ")
+                    Console.WriteLine("m_HmdId: " & mHmd.m_Info.m_HmdId)
+                    Console.WriteLine("m_HmdType: " & mHmd.m_Info.m_HmdType.ToString)
+
+                    Console.WriteLine("m_HmdSerial: " & mHmd.m_Info.m_HmdSerial)
+                    Console.WriteLine("IsHmdStable: " & mHmd.IsHmdStable())
+
+                    If (mHmd.m_Info.IsStateValid()) Then
+                        Select Case (mHmd.m_Info.m_HmdType)
+                            Case PSMHmdType.PSMHmd_Morpheus
+                                Dim mPSMorpheusState = mHmd.m_Info.GetPSState(Of HeadMountedDevices.Info.PSMorpheusState)
+
+                                Console.WriteLine("m_IsCurrentlyTracking: " & mPSMorpheusState.m_IsCurrentlyTracking)
+                                Console.WriteLine("m_IsPositionValid: " & mPSMorpheusState.m_IsPositionValid)
+                                Console.WriteLine("m_IsOrientationValid: " & mPSMorpheusState.m_IsOrientationValid)
+                                Console.WriteLine("m_IsTrackingEnabled: " & mPSMorpheusState.m_IsTrackingEnabled)
+                            Case PSMHmdType.PSMHmd_Virtual
+                                Dim mPSVirtualHmdState = mHmd.m_Info.GetPSState(Of HeadMountedDevices.Info.PSVirtualHmdState)
+
+                                Console.WriteLine("m_bIsCurrentlyTracking: " & mPSVirtualHmdState.m_IsCurrentlyTracking)
+                                Console.WriteLine("m_IsPositionValid: " & mPSVirtualHmdState.m_IsPositionValid)
+                                Console.WriteLine("m_IsOrientationValid: " & mPSVirtualHmdState.m_IsTrackingEnabled)
+                        End Select
+                    End If
+
+                    If (mHmd.m_Info.IsPoseValid()) Then
+                        Console.WriteLine("m_Position.x: " & mHmd.m_Info.m_Pose.m_Position.x)
+                        Console.WriteLine("m_Position.y: " & mHmd.m_Info.m_Pose.m_Position.y)
+                        Console.WriteLine("m_Position.z: " & mHmd.m_Info.m_Pose.m_Position.z)
+
+                        Console.WriteLine("m_Orientation.x: " & mHmd.m_Info.m_Pose.m_Orientation.x)
+                        Console.WriteLine("m_Orientation.y: " & mHmd.m_Info.m_Pose.m_Orientation.y)
+                        Console.WriteLine("m_Orientation.z: " & mHmd.m_Info.m_Pose.m_Orientation.z)
+                        Console.WriteLine("m_Orientation.w: " & mHmd.m_Info.m_Pose.m_Orientation.w)
+                    End If
+
+                    If (mHmd.m_Info.IsSensorValid()) Then
+                        Console.WriteLine("m_Gyroscope.x: " & mHmd.m_Info.m_PSCalibratedSensor.m_Gyroscope.x)
+                        Console.WriteLine("m_Gyroscope.y: " & mHmd.m_Info.m_PSCalibratedSensor.m_Gyroscope.y)
+                        Console.WriteLine("m_Gyroscope.z: " & mHmd.m_Info.m_PSCalibratedSensor.m_Gyroscope.z)
+
+                        Console.WriteLine("m_Magnetometer.x: " & mHmd.m_Info.m_PSCalibratedSensor.m_Magnetometer.x)
+                        Console.WriteLine("m_Magnetometer.y: " & mHmd.m_Info.m_PSCalibratedSensor.m_Magnetometer.y)
+                        Console.WriteLine("m_Magnetometer.z: " & mHmd.m_Info.m_PSCalibratedSensor.m_Magnetometer.z)
+
+                        Console.WriteLine("m_Accelerometer.x: " & mHmd.m_Info.m_PSCalibratedSensor.m_Accelerometer.x)
+                        Console.WriteLine("m_Accelerometer.y: " & mHmd.m_Info.m_PSCalibratedSensor.m_Accelerometer.y)
+                        Console.WriteLine("m_Accelerometer.z: " & mHmd.m_Info.m_PSCalibratedSensor.m_Accelerometer.z)
+                    End If
+
+                    If (mHmd.m_Info.IsTrackingValid()) Then
+                        If (mHmd.m_Info.m_PSTracking.m_Shape = PSMShape.PSMShape_Ellipse) Then
+                            Dim mProjection = mHmd.m_Info.m_PSTracking.GetTrackingProjection(Of HeadMountedDevices.Info.PSTracking.PSMTrackingProjectionEllipse)
+
+                            Console.WriteLine("mCenter.x: " & mProjection.mCenter.x)
+                            Console.WriteLine("mCenter.y: " & mProjection.mCenter.y)
+                        End If
+                    End If
+
+                    Threading.Thread.Sleep(100)
+
+                    'GC.Collect()
+                    'GC.WaitForPendingFinalizers()
+                End While
+            End If
+        End Using
+    End Sub
+
     Private Sub DoTrackers(iListenTracker As Integer)
         Using mService As New Service(sHost)
             mService.Connect()
@@ -206,22 +339,22 @@ Module Tests
                 mTracker.Refresh(Trackers.Info.RefreshFlags.RefreshType_Init)
 
                 While True
-                    ' Poll changes and refresh tracker data
-                    ' Use 'RefreshFlags' to optimize what you need to reduce API calls
+                    ' Poll changes and refresh tracker data.
+                    ' Use 'RefreshFlags' to optimize what you need to reduce API calls.
                     mService.Update()
 
                     If (mService.HasTrackerListChanged) Then
                         Throw New ArgumentException("Tracker list has changed")
                     End If
 
-                    ' Tracker pose does not update with stream,
+                    ' Tracker pose does not update with stream.
                     If (mService.HasPlayspaceOffsetChanged) Then
                         mTracker.Refresh(Trackers.Info.RefreshFlags.RefreshType_Init)
                         Console.WriteLine("Playsapce offsets have changed")
                     End If
 
                     Console.WriteLine(" --------------------------------- ")
-                    Console.WriteLine("Tracker ID: " & mTracker.m_Info.m_TrackerId)
+                    Console.WriteLine("m_TrackerId: " & mTracker.m_Info.m_TrackerId)
                     Console.WriteLine("m_TrackerType: " & mTracker.m_Info.m_TrackerType.ToString)
                     Console.WriteLine("m_TrackerDrvier: " & mTracker.m_Info.m_TrackerDrvier.ToString)
                     Console.WriteLine("m_DevicePath: " & mTracker.m_Info.m_DevicePath)

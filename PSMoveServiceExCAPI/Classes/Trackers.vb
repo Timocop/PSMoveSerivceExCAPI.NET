@@ -35,7 +35,7 @@ Partial Public Class PSMoveServiceExCAPI
             m_Info.SetTrackerView(_PSMClientTrackerInfo)
             m_Info.SetTrackerPose(_PSMClientTrackerInfo)
 
-            m_Info.SetControllerInitalized()
+            m_Info.SetTrackerInitalized()
         End Sub
 
         Public Sub Refresh(iRefreshType As Info.RefreshFlags)
@@ -97,7 +97,7 @@ Partial Public Class PSMoveServiceExCAPI
                 g_Pose = New PSPose(mPose.tracker_pose)
             End Sub
 
-            Protected Friend Sub SetControllerInitalized()
+            Protected Friend Sub SetTrackerInitalized()
                 g_bIsInitalized = True
             End Sub
 
@@ -213,7 +213,7 @@ Partial Public Class PSMoveServiceExCAPI
                                     SetTrackerView(mData.trackers(i))
                                     SetTrackerPose(mData.trackers(i))
 
-                                    SetControllerInitalized()
+                                    SetTrackerInitalized()
                                     Exit For
                                 End If
                             Next

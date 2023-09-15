@@ -446,10 +446,10 @@ Partial Public Class PSMoveServiceExCAPI
         <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMHmdList
             <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_HMD_COUNT)>
-            Public hmd_id As PINVOKE_PSMHeadMountedDisplay()
+            Public hmd_id As Integer()
 
             <MarshalAs(UnmanagedType.ByValArray, SizeConst:=PSMOVESERVICE_MAX_HMD_COUNT)>
-            Public hmd_type As PSMHmdType
+            Public hmd_type As PSMHmdType()
 
             Public count As Integer
         End Structure
@@ -717,33 +717,115 @@ Partial Public Class PSMoveServiceExCAPI
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StartTrackerDataStreamAsync(PSMTrackerID tracker_id, PSMRequestID *out_request_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StopTrackerDataStreamAsync(PSMTrackerID tracker_id, PSMRequestID *out_request_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetTrackingSpaceSettingsAsync(PSMRequestID *out_request_id);
-        'PSM_PUBLIC_FUNCTION(PSMHeadMountedDisplay *) PSM_GetHmd(PSMHmdID hmd_id);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdEx(PSMHmdID hmd_id, PSMHeadMountedDisplayEx *out_hmd);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdMorpheusState(PSMHmdID hmd_id, PSMMorpheus *hmd_state);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdVirtualState(PSMHmdID hmd_id, PSMVirtualHMD *hmd_state);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdPhysicsData(PSMHmdID hmd_id, PSMPhysicsData *out_physics);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdMorpheusRawSensorData(PSMHmdID hmd_id, PSMMorpheusRawSensorData *out_data);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdMorpheusSensorData(PSMHmdID hmd_id, PSMMorpheusCalibratedSensorData *out_data);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_AllocateHmdListener(PSMHmdID hmd_id);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_FreeHmdListener(PSMHmdID hmd_id);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdOrientation(PSMHmdID hmd_id, PSMQuatf *out_orientation);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdPosition(PSMHmdID hmd_id, PSMVector3f *out_position);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdPose(PSMHmdID hmd_id, PSMPosef *out_pose);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetIsHmdStable(PSMHmdID hmd_id, bool *out_is_stable);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdRawTrackerData(PSMHmdID hmd_id, PSMRawTrackerData *out_tracker_data);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdRawTrackerShape(PSMHmdID hmd_id, PSMTrackingProjection:eShapeType *out_shape_type);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdRawTrackerDataEllipse(PSMHmdID hmd_id, PSMRawTrackerDataEllipse *out_tracker_data);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdRawTrackerDataLightbar(PSMHmdID hmd_id, PSMRawTrackerDataLightbat *out_tracker_data);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdRawTrackerDataPointcloud(PSMHmdID hmd_id, PSMRawTrackerDataPointcloud *out_tracker_data);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetIsHmdTracking(PSMHmdID hmd_id, bool *out_is_tracking);
+
+
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmd(hmd_id As Integer) As IntPtr
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdEx(hmd_id As Integer, out_hmd As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_AllocateHmdListener(hmd_id As Integer) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_FreeHmdListener(hmd_id As Integer) As Integer
+        End Function
+
+        '<DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        'Public Shared Function PSM_GetHmdMorpheusState(hmd_id As Integer, hmd_state As IntPtr) As Integer
+        'End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdMorpheusStateEx(hmd_id As Integer, hmd_state As IntPtr) As Integer
+        End Function
+
+        '<DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        'Public Shared Function PSM_GetHmdVirtualState(hmd_id As Integer, hmd_state As IntPtr) As Integer
+        'End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdVirtualStateEx(hmd_id As Integer, hmd_state As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdList(out_hmd_list As IntPtr, timeout_ms As Integer) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdOrientation(hmd_id As Integer, out_orientation As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdPosition(hmd_id As Integer, out_position As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetIsHmdStable(hmd_id As Integer, <Out> ByRef out_is_stable As Byte) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetIsHmdTracking(hmd_id As Integer, <Out> ByRef out_is_tracking As Byte) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_StartHmdDataStream(hmd_id As Integer, data_stream_flags As UInteger, timeout_ms As Integer) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_StopHmdDataStream(hmd_id As Integer, timeout_ms As Integer) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdPhysicsData(hmd_id As Integer, out_physics As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdMorpheusRawSensorData(hmd_id As Integer, out_data As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdMorpheusSensorData(hmd_id As Integer, out_data As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdPose(hmd_id As Integer, out_pose As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdRawTrackerShape(hmd_id As Integer, <Out> ByRef out_shape_type As Integer) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdRawTrackerData(hmd_id As Integer, out_tracker_data As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdRawTrackerDataEllipse(hmd_id As Integer, out_tracker_data As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdRawTrackerDataLightbar(hmd_id As Integer, out_tracker_data As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_GetHmdRawTrackerDataPointcloud(hmd_id As Integer, out_tracker_data As IntPtr) As Integer
+        End Function
+
+        <DllImport("PSMoveClient_CAPI.dll", CharSet:=CharSet.Ansi)>
+        Public Shared Function PSM_SetHmdDataStreamTrackerIndex(hmd_id As Integer, tracker_id As Integer, timeout_ms As Integer) As Integer
+        End Function
+
+
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdPixelLocationOnTracker(PSMHmdID hmd_id, PSMTrackerID *out_tracker_id, PSMVector2f *out_location);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdPositionOnTracker(PSMHmdID hmd_id, PSMTrackerID *out_tracker_id, PSMVector3f *out_position);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdOrientationOnTracker(PSMHmdID hmd_id, PSMTrackerID *out_tracker_id, PSMQuatf *out_orientation);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdProjectionOnTracker(PSMHmdID hmd_id, PSMTrackerID *out_tracker_id, PSMTrackingProjection *out_projection);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdList(PSMHmdList *out_hmd_list, int timeout_ms);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StartHmdDataStream(PSMHmdID hmd_id, unsigned int data_stream_flags, int timeout_ms);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StopHmdDataStream(PSMHmdID hmd_id, int timeout_ms);
-        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_SetHmdDataStreamTrackerIndex(PSMHmdID hmd_id, PSMTrackerID tracker_id, int timeout_ms);
+        'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdProjectionOnTracker(PSMHmdID hmd_id, PSMTrackerID *out_tracker_id, PSMTrackingProjection *out_projection); 
+
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_GetHmdListAsync(PSMRequestID *out_request_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StartHmdDataStreamAsync(PSMHmdID hmd_id, unsigned int data_stream_flags, PSMRequestID *out_request_id);
         'PSM_PUBLIC_FUNCTION(PSMResult) PSM_StopHmdDataStreamAsync(PSMHmdID hmd_id, PSMRequestID *out_request_id);
