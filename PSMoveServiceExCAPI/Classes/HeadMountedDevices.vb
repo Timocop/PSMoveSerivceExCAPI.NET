@@ -166,13 +166,13 @@ Partial Public Class PSMoveServiceExCAPI
                 End Get
             End Property
 
-            ReadOnly Property m_PSMoveState As PSMorpheusState
+            ReadOnly Property m_PSMorpheusState As PSMorpheusState
                 Get
                     Return TryCast(g_PSState, PSMorpheusState)
                 End Get
             End Property
 
-            ReadOnly Property m_PSVirtualState As PSVirtualHmdState
+            ReadOnly Property m_PSVirtualHmdState As PSVirtualHmdState
                 Get
                     Return TryCast(g_PSState, PSVirtualHmdState)
                 End Get
