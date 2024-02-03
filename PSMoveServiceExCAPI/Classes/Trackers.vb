@@ -15,7 +15,7 @@ Partial Public Class PSMoveServiceExCAPI
 
         Public Sub New(_TrackerId As Integer, _NoInitalization As Boolean)
             If (_TrackerId < 0 OrElse _TrackerId > PSMOVESERVICE_MAX_TRACKER_COUNT - 1) Then
-                Throw New ArgumentOutOfRangeException()
+                Throw New ServiceExceptions.ServiceDeviceOutOfRangeException()
             End If
 
             g_mInfo = New Info(Me, _TrackerId)

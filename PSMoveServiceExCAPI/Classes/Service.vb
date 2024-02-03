@@ -37,15 +37,13 @@ Partial Public Class PSMoveServiceExCAPI
 
         Public Sub Connect(Optional iTimeout As Integer = 5000)
             If (IsInitialized()) Then
-                Throw New ArgumentException("Already initialized")
+                Throw New ServiceExceptions.ServiceInitializationException("Service client already initialized")
             End If
 
-            If (PInvoke.PSM_Initialize(g_sIP, g_sPort, iTimeout) <> Constants.PSMResult.PSMResult_Success) Then
-                Throw New ArgumentException("PSM_Initialize failed")
-            End If
+            ServiceExceptions.ThrowExceptionServiceRequest("PSM_Initialize failed", PInvoke.PSM_Initialize(g_sIP, g_sPort, iTimeout))
 
             If (GetClientProtocolVersion() <> GetServerProtocolVersion()) Then
-                Throw New ArgumentException("Version mismatch")
+                Throw New ServiceExceptions.ServiceVersionException("Service protocol version mismatch")
             End If
         End Sub
 
@@ -55,9 +53,7 @@ Partial Public Class PSMoveServiceExCAPI
             End If
 
             Dim sServerVersion As New StringBuilder(Constants.PSMOVESERVICE_MAX_VERSION_STRING_LEN)
-            If (PInvoke.PSM_GetServiceVersionString(sServerVersion, sServerVersion.Capacity, Constants.PSM_DEFAULT_TIMEOUT) <> Constants.PSMResult.PSMResult_Success) Then
-                Throw New ArgumentException("PSM_GetServiceVersionString failed")
-            End If
+            ServiceExceptions.ThrowExceptionServiceRequest("PSM_GetServiceVersionString failed", PInvoke.PSM_GetServiceVersionString(sServerVersion, sServerVersion.Capacity, Constants.PSM_DEFAULT_TIMEOUT))
 
             g_sServerProtocolVersion = sServerVersion.ToString
 
@@ -87,29 +83,25 @@ Partial Public Class PSMoveServiceExCAPI
 
         Public Sub Update()
             If (Not IsInitialized()) Then
-                Throw New ArgumentException("Not initialized")
+                Throw New ServiceExceptions.ServiceInitializationException("Service client not initialized")
             End If
 
-            If (PInvoke.PSM_Update() <> Constants.PSMResult.PSMResult_Success) Then
-                Throw New ArgumentException("PSM_Update failed")
-            End If
+            ServiceExceptions.ThrowExceptionServiceRequest("PSM_Update failed", PInvoke.PSM_Update())
 
             If (Not IsConnected()) Then
-                Throw New ArgumentException("Not connected")
+                Throw New ServiceExceptions.ServiceDisconnectedException("Not connected to service")
             End If
         End Sub
 
         Public Sub UpdateNoPollMessages()
             If (Not IsInitialized()) Then
-                Throw New ArgumentException("Not initialized")
+                Throw New ServiceExceptions.ServiceInitializationException("Service client not initialized")
             End If
 
-            If (PInvoke.PSM_UpdateNoPollMessages() <> Constants.PSMResult.PSMResult_Success) Then
-                Throw New ArgumentException("PSM_Update failed")
-            End If
+            ServiceExceptions.ThrowExceptionServiceRequest("PSM_UpdateNoPollMessages failed", PInvoke.PSM_UpdateNoPollMessages())
 
             If (Not IsConnected()) Then
-                Throw New ArgumentException("Not connected")
+                Throw New ServiceExceptions.ServiceDisconnectedException("Not connected to service")
             End If
         End Sub
 

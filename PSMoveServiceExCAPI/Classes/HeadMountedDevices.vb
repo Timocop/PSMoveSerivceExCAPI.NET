@@ -18,7 +18,7 @@ Partial Public Class PSMoveServiceExCAPI
 
         Public Sub New(_HmdId As Integer, _StartDataStream As Boolean, _NoInitalization As Boolean)
             If (_HmdId < 0 OrElse _HmdId > PSMOVESERVICE_MAX_HMD_COUNT - 1) Then
-                Throw New ArgumentOutOfRangeException()
+                Throw New ServiceExceptions.ServiceDeviceOutOfRangeException()
             End If
 
             g_mInfo = New Info(Me, _HmdId)
@@ -684,14 +684,12 @@ Partial Public Class PSMoveServiceExCAPI
 
                 g_bListening = Value
 
+                ServiceExceptions.ThrowExceptionOnServiceStatus()
+
                 If (g_bListening) Then
-                    If (PInvoke.PSM_AllocateHmdListener(g_mInfo.m_HmdId) <> PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_AllocateHmdListener failed")
-                    End If
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_AllocateHmdListener failed", PInvoke.PSM_AllocateHmdListener(g_mInfo.m_HmdId))
                 Else
-                    If (PInvoke.PSM_FreeHmdListener(g_mInfo.m_HmdId) <> PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_FreeHmdListener failed")
-                    End If
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_FreeHmdListener failed", PInvoke.PSM_FreeHmdListener(g_mInfo.m_HmdId))
                 End If
             End Set
         End Property
@@ -726,22 +724,20 @@ Partial Public Class PSMoveServiceExCAPI
 
                 g_bDataStream = Value
 
+                ServiceExceptions.ThrowExceptionOnServiceStatus()
+
                 If (g_bDataStream) Then
-                    If (PInvoke.PSM_StartHmdDataStream(g_mInfo.m_HmdId, CUInt(m_DataStreamFlags), PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_StartHmdDataStream failed")
-                    End If
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_StartHmdDataStream failed", PInvoke.PSM_StartHmdDataStream(g_mInfo.m_HmdId, CUInt(m_DataStreamFlags), PSM_DEFAULT_TIMEOUT))
                 Else
-                    If (PInvoke.PSM_StopHmdDataStream(g_mInfo.m_HmdId, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_StopHmdDataStream failed")
-                    End If
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_StopHmdDataStream failed", PInvoke.PSM_StopHmdDataStream(g_mInfo.m_HmdId, PSM_DEFAULT_TIMEOUT))
                 End If
             End Set
         End Property
 
         Public Sub SetTrackerStream(iTrackerID As Integer)
-            If (PInvoke.PSM_SetHmdDataStreamTrackerIndex(m_Info.m_HmdId, iTrackerID, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
-                Throw New ArgumentException("PSM_SetHmdDataStreamTrackerIndex failed")
-            End If
+            ServiceExceptions.ThrowExceptionOnServiceStatus()
+
+            ServiceExceptions.ThrowExceptionServiceRequest("PSM_SetHmdDataStreamTrackerIndex failed", PInvoke.PSM_SetHmdDataStreamTrackerIndex(m_Info.m_HmdId, iTrackerID, PSM_DEFAULT_TIMEOUT))
 
             ' Start streams then if not already
             m_DataStreamFlags = (m_DataStreamFlags Or PSMStreamFlags.PSMStreamFlags_includeRawTrackerData)

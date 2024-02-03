@@ -97,7 +97,7 @@ Module Tests
             mService.Connect()
 
             ' Get new list of controllers.
-            mControllers = Controllers.GetControllerList
+            mControllers = Controllers.GetControllerList()
 
             If (iListenController < 0 OrElse iListenController > mControllers.Length - 1) Then
                 Throw New ArgumentException("Controller id out of range")
@@ -327,7 +327,7 @@ Module Tests
             mService.Connect()
 
             ' Get new list of controllers
-            mTrackers = Trackers.GetTrackerList
+            mTrackers = Trackers.GetTrackerList()
 
             If (iListenTracker < 0 OrElse iListenTracker > mTrackers.Length - 1) Then
                 Throw New ArgumentException("Controller id out of range")

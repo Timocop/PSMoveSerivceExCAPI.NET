@@ -18,7 +18,7 @@ Partial Public Class PSMoveServiceExCAPI
 
         Public Sub New(_ControllerId As Integer, _StartDataStream As Boolean, _NoInitalization As Boolean)
             If (_ControllerId < 0 OrElse _ControllerId > PSMOVESERVICE_MAX_CONTROLLER_COUNT - 1) Then
-                Throw New ArgumentOutOfRangeException()
+                Throw New ServiceExceptions.ServiceDeviceOutOfRangeException()
             End If
 
             g_mInfo = New Info(Me, _ControllerId)
@@ -121,9 +121,9 @@ Partial Public Class PSMoveServiceExCAPI
 
                     g_iControllerHand = Value
 
-                    If (PInvoke.PSM_SetControllerHand(m_ControllerId, g_iControllerHand, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_SetControllerHand failed")
-                    End If
+                    ServiceExceptions.ThrowExceptionOnServiceStatus()
+
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_SetControllerHand failed", PInvoke.PSM_SetControllerHand(m_ControllerId, g_iControllerHand, PSM_DEFAULT_TIMEOUT))
                 End Set
             End Property
 
@@ -1043,14 +1043,12 @@ Partial Public Class PSMoveServiceExCAPI
 
                 g_bListening = Value
 
+                ServiceExceptions.ThrowExceptionOnServiceStatus()
+
                 If (g_bListening) Then
-                    If (PInvoke.PSM_AllocateControllerListener(g_mInfo.m_ControllerId) <> PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_AllocateControllerListener failed")
-                    End If
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_AllocateControllerListener failed", PInvoke.PSM_AllocateControllerListener(g_mInfo.m_ControllerId))
                 Else
-                    If (PInvoke.PSM_FreeControllerListener(g_mInfo.m_ControllerId) <> PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_FreeControllerListener failed")
-                    End If
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_FreeControllerListener failed", PInvoke.PSM_FreeControllerListener(g_mInfo.m_ControllerId))
                 End If
             End Set
         End Property
@@ -1085,23 +1083,20 @@ Partial Public Class PSMoveServiceExCAPI
 
                 g_bDataStream = Value
 
+                ServiceExceptions.ThrowExceptionOnServiceStatus()
+
                 If (g_bDataStream) Then
-                    If (PInvoke.PSM_StartControllerDataStream(g_mInfo.m_ControllerId, CUInt(m_DataStreamFlags), PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_StartControllerDataStream failed")
-                    End If
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_StartControllerDataStream failed", PInvoke.PSM_StartControllerDataStream(g_mInfo.m_ControllerId, CUInt(m_DataStreamFlags), PSM_DEFAULT_TIMEOUT))
                 Else
-                    If (PInvoke.PSM_StopControllerDataStream(g_mInfo.m_ControllerId, PSM_DEFAULT_TIMEOUT) <>
-                            PSMResult.PSMResult_Success) Then
-                        Throw New ArgumentException("PSM_StopControllerDataStream failed")
-                    End If
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_StopControllerDataStream failed", PInvoke.PSM_StopControllerDataStream(g_mInfo.m_ControllerId, PSM_DEFAULT_TIMEOUT))
                 End If
             End Set
         End Property
 
         Public Sub SetTrackerStream(iTrackerID As Integer)
-            If (PInvoke.PSM_SetControllerDataStreamTrackerIndex(m_Info.m_ControllerId, iTrackerID, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
-                Throw New ArgumentException("PSM_SetControllerDataStreamTrackerIndex failed")
-            End If
+            ServiceExceptions.ThrowExceptionOnServiceStatus()
+
+            ServiceExceptions.ThrowExceptionServiceRequest("PSM_SetControllerDataStreamTrackerIndex failed", PInvoke.PSM_SetControllerDataStreamTrackerIndex(m_Info.m_ControllerId, iTrackerID, PSM_DEFAULT_TIMEOUT))
 
             ' Start streams then if not already
             m_DataStreamFlags = (m_DataStreamFlags Or PSMStreamFlags.PSMStreamFlags_includeRawTrackerData)
@@ -1123,9 +1118,9 @@ Partial Public Class PSMoveServiceExCAPI
         End Function
 
         Public Sub SetControllerLEDTrackingColor(iColor As PSMTrackingColorType)
-            If (PInvoke.PSM_SetControllerLEDTrackingColor(m_Info.m_ControllerId, iColor, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
-                Throw New ArgumentException("PSM_SetControllerLEDTrackingColor failed")
-            End If
+            ServiceExceptions.ThrowExceptionOnServiceStatus()
+
+            ServiceExceptions.ThrowExceptionServiceRequest("PSM_SetControllerLEDTrackingColor failed", PInvoke.PSM_SetControllerLEDTrackingColor(m_Info.m_ControllerId, iColor, PSM_DEFAULT_TIMEOUT))
         End Sub
 
         Public Sub SetControllerLEDOverrideColor(r As Byte, g As Byte, b As Byte)
@@ -1133,18 +1128,18 @@ Partial Public Class PSMoveServiceExCAPI
         End Sub
 
         Public Sub SetControllerLEDOverrideColor(mColor As Color)
-            If (PInvoke.PSM_SetControllerLEDOverrideColor(m_Info.m_ControllerId, mColor.R, mColor.G, mColor.B) <> PSMResult.PSMResult_Success) Then
-                Throw New ArgumentException("PSM_SetControllerLEDTrackingColor failed")
-            End If
+            ServiceExceptions.ThrowExceptionOnServiceStatus()
+
+            ServiceExceptions.ThrowExceptionServiceRequest("PSM_SetControllerLEDTrackingColor failed", PInvoke.PSM_SetControllerLEDOverrideColor(m_Info.m_ControllerId, mColor.R, mColor.G, mColor.B))
         End Sub
 
         Public Sub ResetControlerOrientation(mOrientation As PSMQuatf)
             Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMQuatf)))
             Marshal.StructureToPtr(mOrientation.ToPinvoke(), hPtr, True)
             Try
-                If (PInvoke.PSM_ResetControllerOrientation(m_Info.m_ControllerId, hPtr, PSM_DEFAULT_TIMEOUT) <> PSMResult.PSMResult_Success) Then
-                    Throw New ArgumentException("PSM_ResetControllerOrientation failed")
-                End If
+                ServiceExceptions.ThrowExceptionOnServiceStatus()
+
+                ServiceExceptions.ThrowExceptionServiceRequest("PSM_ResetControllerOrientation failed", PInvoke.PSM_ResetControllerOrientation(m_Info.m_ControllerId, hPtr, PSM_DEFAULT_TIMEOUT))
             Finally
                 Marshal.FreeHGlobal(hPtr)
             End Try
@@ -1157,9 +1152,9 @@ Partial Public Class PSMoveServiceExCAPI
         End Function
 
         Public Sub SetControllerRumble(iChannel As PSMControllerRumbleChannel, fRumble As Single)
-            If (PInvoke.PSM_SetControllerRumble(m_Info.m_ControllerId, iChannel, fRumble) <> PSMResult.PSMResult_Success) Then
-                Throw New ArgumentException("PSM_SetControllerRumble failed")
-            End If
+            ServiceExceptions.ThrowExceptionOnServiceStatus()
+
+            ServiceExceptions.ThrowExceptionServiceRequest("PSM_SetControllerRumble failed", PInvoke.PSM_SetControllerRumble(m_Info.m_ControllerId, iChannel, fRumble))
         End Sub
 
         Public Function IsControllerStable() As Boolean
