@@ -99,7 +99,7 @@ Public Class ServiceExceptions
     End Sub
 
     Public Shared Function ThrowExceptionServiceRequest(sMessage As String, iResult As Integer) As PSMResult
-        Return ThrowExceptionServiceRequest(sMessage, iResult)
+        Return ThrowExceptionServiceRequest(sMessage, CType(iResult, PSMResult))
     End Function
 
     Public Shared Function ThrowExceptionServiceRequest(sMessage As String, iResult As PSMResult) As PSMResult
