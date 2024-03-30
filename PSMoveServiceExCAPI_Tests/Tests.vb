@@ -336,6 +336,10 @@ Module Tests
             If (mTrackers IsNot Nothing) Then
                 Dim mTracker As Trackers = mTrackers(iListenTracker)
 
+                ' Not really needed unless you grab stats from the tracker.
+                mTracker.m_Listening = True
+                mTracker.m_DataStreamEnabled = True
+
                 mTracker.Refresh(Trackers.Info.RefreshFlags.RefreshType_Init)
 
                 While True
@@ -353,12 +357,22 @@ Module Tests
                         Console.WriteLine("Playsapce offsets have changed")
                     End If
 
+
+                    mTracker.Refresh(Trackers.Info.RefreshFlags.RefreshType_Stats)
+
                     Console.WriteLine(" --------------------------------- ")
                     Console.WriteLine("m_TrackerId: " & mTracker.m_Info.m_TrackerId)
                     Console.WriteLine("m_TrackerType: " & mTracker.m_Info.m_TrackerType.ToString)
                     Console.WriteLine("m_TrackerDrvier: " & mTracker.m_Info.m_TrackerDrvier.ToString)
                     Console.WriteLine("m_DevicePath: " & mTracker.m_Info.m_DevicePath)
                     Console.WriteLine("m_SharedMemoryName: " & mTracker.m_Info.m_SharedMemoryName)
+
+                    Console.WriteLine("m_IsConnected: " & mTracker.m_Info.m_Stats.m_IsConnected)
+                    Console.WriteLine("m_ListenerCount: " & mTracker.m_Info.m_Stats.m_ListenerCount)
+                    Console.WriteLine("m_SequenceNum: " & mTracker.m_Info.m_Stats.m_SequenceNum)
+                    Console.WriteLine("m_DataFrameAverageFps: " & mTracker.m_Info.m_Stats.m_DataFrameAverageFps)
+
+                    Console.WriteLine("m_DataFrameLastReceivedTime: " & mTracker.m_Info.m_Stats.m_DataFrameLastReceivedTime.ToString)
 
                     If (mTracker.m_Info.IsPoseValid()) Then
                         Console.WriteLine("m_Position.x: " & mTracker.m_Info.m_Pose.m_Position.x)

@@ -10,23 +10,30 @@ Partial Public Class PSMoveServiceExCAPI
         Private g_bDataStream As Boolean = False
 
         Public Sub New(_TrackerId As Integer)
-            Me.New(_TrackerId, True)
+            Me.New(_TrackerId, False, True)
         End Sub
 
-        Public Sub New(_TrackerId As Integer, _NoInitalization As Boolean)
+        Public Sub New(_TrackerId As Integer, _StartDataStream As Boolean, _NoInitalization As Boolean)
             If (_TrackerId < 0 OrElse _TrackerId > PSMOVESERVICE_MAX_TRACKER_COUNT - 1) Then
                 Throw New ServiceExceptions.ServiceDeviceOutOfRangeException()
             End If
 
             g_mInfo = New Info(Me, _TrackerId)
 
-            If (Not _NoInitalization) Then
-                g_mInfo.Refresh(Info.RefreshFlags.RefreshType_Init)
+            If (_NoInitalization) Then
+                g_mInfo.Refresh(Info.RefreshFlags.RefreshType_Stats)
+            Else
+                g_mInfo.Refresh(Info.RefreshFlags.RefreshType_Stats Or Info.RefreshFlags.RefreshType_Init)
+            End If
+
+            If (_StartDataStream) Then
+                m_Listening = True
+                m_DataStreamEnabled = True
             End If
         End Sub
 
         Protected Friend Sub New(_TrackerId As Integer, _PSMClientTrackerInfo As PInvoke.PINVOKE_PSMClientTrackerInfo)
-            Me.New(_TrackerId, True)
+            Me.New(_TrackerId, False, True)
 
             m_Info.SetTrackerType(_PSMClientTrackerInfo.tracker_type)
             m_Info.SetTrackerDriver(_PSMClientTrackerInfo.tracker_Driver)
@@ -54,6 +61,7 @@ Partial Public Class PSMoveServiceExCAPI
 
             Private g_Pose As PSPose = Nothing
             Private g_View As PSView = Nothing
+            Private g_Stats As PSStats = Nothing
 
             Private ReadOnly g_iTrackerId As Integer = -1
 
@@ -66,6 +74,7 @@ Partial Public Class PSMoveServiceExCAPI
 
             Enum RefreshFlags
                 RefreshType_Init = (1 << 0)
+                RefreshType_Stats = (1 << 1)
             End Enum
 
             Public Sub New(_Trackers As Trackers, _TrackerId As Integer)
@@ -149,6 +158,12 @@ Partial Public Class PSMoveServiceExCAPI
                 End Get
             End Property
 
+            ReadOnly Property m_Stats As PSStats
+                Get
+                    Return g_Stats
+                End Get
+            End Property
+
             Class PSView
                 Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMClientTrackerInfo)
                     tracker_focal_lengths = tracker_focal_lengths.FromPinvoke(_FromPinvoke.tracker_focal_lengths)
@@ -177,6 +192,25 @@ Partial Public Class PSMoveServiceExCAPI
                 ReadOnly Property tracker_k3 As Single
                 ReadOnly Property tracker_p1 As Single
                 ReadOnly Property tracker_p2 As Single
+
+                Function GetRaw() As PInvoke.PINVOKE_PSMClientTrackerInfo
+                    Dim mInfo As New PInvoke.PINVOKE_PSMClientTrackerInfo
+
+                    mInfo.tracker_focal_lengths = tracker_focal_lengths.ToPinvoke
+                    mInfo.tracker_principal_point = tracker_principal_point.ToPinvoke
+                    mInfo.tracker_screen_dimensions = tracker_screen_dimensions.ToPinvoke
+                    mInfo.tracker_hfov = tracker_hfov
+                    mInfo.tracker_vfov = tracker_vfov
+                    mInfo.tracker_znear = tracker_znear
+                    mInfo.tracker_zfar = tracker_zfar
+                    mInfo.tracker_k1 = tracker_k1
+                    mInfo.tracker_k2 = tracker_k2
+                    mInfo.tracker_k3 = tracker_k3
+                    mInfo.tracker_p1 = tracker_p1
+                    mInfo.tracker_p2 = tracker_p2
+
+                    Return mInfo
+                End Function
             End Class
 
             Class PSPose
@@ -187,6 +221,22 @@ Partial Public Class PSMoveServiceExCAPI
 
                 ReadOnly Property m_Position As PSMVector3f
                 ReadOnly Property m_Orientation As PSMQuatf
+            End Class
+
+            Class PSStats
+                Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMTracker)
+                    m_ListenerCount = _FromPinvoke.listener_count
+                    m_IsConnected = CBool(_FromPinvoke.is_connected)
+                    m_SequenceNum = _FromPinvoke.sequence_num
+                    m_DataFrameLastReceivedTime = TimeSpan.FromMilliseconds(_FromPinvoke.data_frame_last_received_time)
+                    m_DataFrameAverageFps = _FromPinvoke.data_frame_average_fps
+                End Sub
+
+                ReadOnly Property m_ListenerCount As Integer
+                ReadOnly Property m_IsConnected As Boolean
+                ReadOnly Property m_SequenceNum As Integer
+                ReadOnly Property m_DataFrameLastReceivedTime As TimeSpan
+                ReadOnly Property m_DataFrameAverageFps As Single
             End Class
 
             Public Function IsViewValid() As Boolean
@@ -223,6 +273,19 @@ Partial Public Class PSMoveServiceExCAPI
                         Marshal.FreeHGlobal(hPtr)
                     End Try
                 End If
+
+                If ((iRefreshType And RefreshFlags.RefreshType_Stats) > 0) Then
+                    Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMTracker)))
+                    Try
+                        If (CType(PInvoke.PSM_GetTrackerEx(m_TrackerId, hPtr), PSMResult) = PSMResult.PSMResult_Success) Then
+                            Dim mData = Marshal.PtrToStructure(Of PInvoke.PINVOKE_PSMTracker)(hPtr)
+
+                            g_Stats = New PSStats(mData)
+                        End If
+                    Finally
+                        Marshal.FreeHGlobal(hPtr)
+                    End Try
+                End If
             End Sub
         End Class
 
@@ -249,6 +312,56 @@ Partial Public Class PSMoveServiceExCAPI
 
             Return mTrackers.ToArray
         End Function
+
+        Property m_Listening As Boolean
+            Get
+                Return g_bListening
+            End Get
+            Set
+                If (g_bListening = Value) Then
+                    Return
+                End If
+
+                g_bListening = Value
+
+                ServiceExceptions.ThrowExceptionOnServiceStatus()
+
+                If (g_bListening) Then
+                    Dim mTrackerInfo = m_Info.m_View.GetRaw()
+
+                    Dim hPtr As IntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(GetType(PInvoke.PINVOKE_PSMClientTrackerInfo)))
+                    Marshal.StructureToPtr(m_Info.m_View.GetRaw(), hPtr, True)
+                    Try
+                        ServiceExceptions.ThrowExceptionServiceRequest("PSM_AllocateTrackerListener failed", PInvoke.PSM_AllocateTrackerListener(g_mInfo.m_TrackerId, hPtr))
+                    Finally
+                        Marshal.FreeHGlobal(hPtr)
+                    End Try
+                Else
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_FreeTrackerListener failed", PInvoke.PSM_FreeTrackerListener(g_mInfo.m_TrackerId))
+                End If
+            End Set
+        End Property
+
+        Property m_DataStreamEnabled As Boolean
+            Get
+                Return g_bDataStream
+            End Get
+            Set
+                If (g_bDataStream = Value) Then
+                    Return
+                End If
+
+                g_bDataStream = Value
+
+                ServiceExceptions.ThrowExceptionOnServiceStatus()
+
+                If (g_bDataStream) Then
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_StartTrackerDataStream failed", PInvoke.PSM_StartTrackerDataStream(g_mInfo.m_TrackerId, PSM_DEFAULT_TIMEOUT))
+                Else
+                    ServiceExceptions.ThrowExceptionServiceRequest("PSM_StopTrackerDataStream failed", PInvoke.PSM_StopTrackerDataStream(g_mInfo.m_TrackerId, PSM_DEFAULT_TIMEOUT))
+                End If
+            End Set
+        End Property
 
 #Region "IDisposable Support"
         Private disposedValue As Boolean ' To detect redundant calls
