@@ -256,19 +256,11 @@ Partial Public Class PSMoveServiceExCAPI
                 Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMMorpheusRawSensorData)
                     m_Accelerometer = m_Accelerometer.FromPinvoke(_FromPinvoke.Accelerometer)
                     m_Gyroscope = m_Gyroscope.FromPinvoke(_FromPinvoke.Gyroscope)
-
-                    m_LinearVelocityCmPerSec = Nothing
-                    m_LinearAccelerationCmPerSecSqr = Nothing
-                    m_AngularVelocityRadPerSec = Nothing
                     m_TimeInSeconds = _FromPinvoke.TimeInSeconds
                 End Sub
 
                 ReadOnly Property m_Accelerometer As PSMVector3i
                 ReadOnly Property m_Gyroscope As PSMVector3i
-
-                ReadOnly Property m_LinearVelocityCmPerSec As PSMVector3i
-                ReadOnly Property m_LinearAccelerationCmPerSecSqr As PSMVector3i
-                ReadOnly Property m_AngularVelocityRadPerSec As PSMVector3i
                 ReadOnly Property m_TimeInSeconds As Double
             End Class
 

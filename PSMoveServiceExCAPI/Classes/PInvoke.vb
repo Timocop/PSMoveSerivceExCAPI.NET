@@ -49,9 +49,9 @@ Partial Public Class PSMoveServiceExCAPI
 
         <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Public Structure PINVOKE_PSMPSMoveRawSensorData
-            Public LinearVelocityCmPerSec As PINVOKE_PSMVector3i
-            Public LinearAccelerationCmPerSecSqr As PINVOKE_PSMVector3i
-            Public AngularVelocityRadPerSec As PINVOKE_PSMVector3i
+            Public Magnetometer As PINVOKE_PSMVector3i
+            Public Accelerometer As PINVOKE_PSMVector3i
+            Public Gyroscope As PINVOKE_PSMVector3i
             Public TimeInSeconds As Double
         End Structure
 

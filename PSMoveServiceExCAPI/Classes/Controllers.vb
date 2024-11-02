@@ -558,31 +558,22 @@ Partial Public Class PSMoveServiceExCAPI
 
             Class PSRawSensor
                 Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMPSMoveRawSensorData)
-                    m_Accelerometer = Nothing
-                    m_Gyroscope = Nothing
-
-                    m_LinearVelocityCmPerSec = m_LinearVelocityCmPerSec.FromPinvoke(_FromPinvoke.LinearVelocityCmPerSec)
-                    m_LinearAccelerationCmPerSecSqr = m_LinearAccelerationCmPerSecSqr.FromPinvoke(_FromPinvoke.LinearAccelerationCmPerSecSqr)
-                    m_AngularVelocityRadPerSec = m_AngularVelocityRadPerSec.FromPinvoke(_FromPinvoke.AngularVelocityRadPerSec)
+                    m_Magnetometer = m_Magnetometer.FromPinvoke(_FromPinvoke.Magnetometer)
+                    m_Accelerometer = m_Accelerometer.FromPinvoke(_FromPinvoke.Accelerometer)
+                    m_Gyroscope = m_Gyroscope.FromPinvoke(_FromPinvoke.Gyroscope)
                     m_TimeInSeconds = _FromPinvoke.TimeInSeconds
                 End Sub
 
                 Sub New(_FromPinvoke As PInvoke.PINVOKE_PSMDS4RawSensorData)
+                    m_Magnetometer = Nothing
                     m_Accelerometer = m_Accelerometer.FromPinvoke(_FromPinvoke.Accelerometer)
                     m_Gyroscope = m_Gyroscope.FromPinvoke(_FromPinvoke.Gyroscope)
-
-                    m_LinearVelocityCmPerSec = Nothing
-                    m_LinearAccelerationCmPerSecSqr = Nothing
-                    m_AngularVelocityRadPerSec = Nothing
                     m_TimeInSeconds = _FromPinvoke.TimeInSeconds
                 End Sub
 
+                ReadOnly Property m_Magnetometer As PSMVector3i
                 ReadOnly Property m_Accelerometer As PSMVector3i
                 ReadOnly Property m_Gyroscope As PSMVector3i
-
-                ReadOnly Property m_LinearVelocityCmPerSec As PSMVector3i
-                ReadOnly Property m_LinearAccelerationCmPerSecSqr As PSMVector3i
-                ReadOnly Property m_AngularVelocityRadPerSec As PSMVector3i
                 ReadOnly Property m_TimeInSeconds As Double
             End Class
 
