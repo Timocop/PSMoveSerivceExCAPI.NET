@@ -357,6 +357,10 @@ Partial Public Class PSMoveServiceExCAPI
             Public data_frame_last_received_time As ULong
             Public data_frame_average_fps As Single
 
+            Public tracker_exposure As Integer
+            Public tracker_gain As Integer
+            Public tracker_width As Integer
+
             Public opaque_shared_memory_accesor As IntPtr
         End Structure
 

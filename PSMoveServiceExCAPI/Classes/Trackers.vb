@@ -230,6 +230,9 @@ Partial Public Class PSMoveServiceExCAPI
                     m_SequenceNum = _FromPinvoke.sequence_num
                     m_DataFrameLastReceivedTime = TimeSpan.FromMilliseconds(_FromPinvoke.data_frame_last_received_time)
                     m_DataFrameAverageFps = _FromPinvoke.data_frame_average_fps
+                    m_TrackerExposure = _FromPinvoke.tracker_exposure
+                    m_TrackerGain = _FromPinvoke.tracker_gain
+                    m_TrackerWidth = _FromPinvoke.tracker_width
                 End Sub
 
                 ReadOnly Property m_ListenerCount As Integer
@@ -237,6 +240,10 @@ Partial Public Class PSMoveServiceExCAPI
                 ReadOnly Property m_SequenceNum As Integer
                 ReadOnly Property m_DataFrameLastReceivedTime As TimeSpan
                 ReadOnly Property m_DataFrameAverageFps As Single
+
+                ReadOnly Property m_TrackerExposure As Integer
+                ReadOnly Property m_TrackerGain As Integer
+                ReadOnly Property m_TrackerWidth As Integer
             End Class
 
             Public Function IsViewValid() As Boolean

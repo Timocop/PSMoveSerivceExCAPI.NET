@@ -372,6 +372,10 @@ Module Tests
                     Console.WriteLine("m_SequenceNum: " & mTracker.m_Info.m_Stats.m_SequenceNum)
                     Console.WriteLine("m_DataFrameAverageFps: " & mTracker.m_Info.m_Stats.m_DataFrameAverageFps)
 
+                    Console.WriteLine("m_TrackerExposure: " & mTracker.m_Info.m_Stats.m_TrackerExposure)
+                    Console.WriteLine("m_TrackerGain: " & mTracker.m_Info.m_Stats.m_TrackerGain)
+                    Console.WriteLine("m_TrackerWidth: " & mTracker.m_Info.m_Stats.m_TrackerWidth)
+
                     Console.WriteLine("m_DataFrameLastReceivedTime: " & mTracker.m_Info.m_Stats.m_DataFrameLastReceivedTime.ToString)
 
                     If (mTracker.m_Info.IsPoseValid()) Then
